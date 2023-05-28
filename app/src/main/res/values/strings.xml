@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Pulpo Ultra</string>
+
+    <string name="BASE_URL_PHARMA_2">https://pulpo-cira.cloud/itg_atlas_s_newapp/android/</string>
+    <string name="BASE_URL_PHARMA">https://pulpo-cira.cloud/itg_pulpoultra_cira/android/</string>
+    <string name="FILES_BASE_URL_PHARMA">https://pulpo-cira.cloud/crm/edetailing_files/</string>
+
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="no_internet_connection_message">Please connect your device to internet source and try again</string>
+    <string name="data_store_name">DATA_STORE_NAME</string>
+    <string name="database_name">PULPO_ALTRA_DATABASE</string>
+    <string name="title_activity_data_center">DataCenterActivity</string>
+    <string name="title_main">MainActivity</string>
+    <string name="title_location_error">LocationErrorActivity</string>
+
+    <string name="deviation_message_text">It\'s important to know that you are in the red area  (about %d meters away) regarding to this account, kindly go to online and check your current location from Google maps, or continue save it</string>
+</resources>

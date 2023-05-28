@@ -1,0 +1,10 @@
+<resources>
+    <string name="fine_location_text">Fine Location</string>
+    <string name="missing_location_permission">Missing location permission</string>
+    <string name="gps_is_disabled">GPS is disabled</string>
+    <string name="no_location_provider_or_cached">There is no Location Provider or Cached one</string>
+    <string name="from_lock_location_app">Location is from Mock Location App</string>
+    <string name="lock_location_app_running">Mock Location App is running</string>
+    <string name="some_error_with_location">Some error with location</string>
+    <string name="enable_automatic_time_option">Enable the automatic time option</string>
+</resources>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<!--    <uses-permission-->
+<!--        android:name="android.permission.WRITE_EXTERNAL_STORAGE"-->
+<!--        tools:ignore="ScopedStorage" />-->
+
+    <application
+        android:name=".AppController"
+        android:allowBackup="true"
+        android:usesCleartextTraffic="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/polpo7"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PulpoUltra"
+        tools:targetApi="31">
+        <activity
+            android:name=".ui.activities.MapActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra">
+        </activity>
+        <activity
+            android:name=".ui.activities.DetailingActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.PulpoUltra2">
+        </activity>
+        <activity
+            android:name=".ui.activities.SplashActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.LoginActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra">
+        </activity>
+        <activity
+            android:name=".ui.activities.DataCenterActivity"
+            android:exported="true"
+            android:label="@string/title_activity_data_center"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PulpoUltra" >
+        </activity>
+        <activity
+            android:name=".ui.activities.ActualActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.OfficeWorkActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.LocationErrorActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.PlannedVisitActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.NewPlanReportActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.ActualVisitReportActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.ProductsReportActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.AccountsReportActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.PlanningActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.ReportsActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+    </application>
+
+</manifest>
