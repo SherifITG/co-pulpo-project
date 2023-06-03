@@ -13,6 +13,7 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.IdAndNameObj
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.enums.IdAndNameTablesNamesEnum.*
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.relationalData.AccountData
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.relationalData.DoctorData
+import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.relationalData.DoctorPlanningData
 import com.itgates.ultra.pulpo.cira.ui.activities.PlanningActivity
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
@@ -38,8 +39,17 @@ class PlanningCurrentValues(private val activity: PlanningActivity) {
 
     var accountsDataListToShow: List<AccountData> = listOf()
     var accountsDataList: List<AccountData> = listOf()
-    var doctorsDataListToShow: List<DoctorData> = listOf()
-    var doctorsDataList: List<DoctorData> = listOf()
+
+    var doctorsDataList: List<DoctorPlanningData> = listOf()
+
+    val amDoctorsDataList: ArrayList<DoctorPlanningData> = ArrayList()
+    var amDoctorsDataListToShow: ArrayList<DoctorPlanningData> = ArrayList()
+    val pmDoctorsDataList: ArrayList<DoctorPlanningData> = ArrayList()
+    var pmDoctorsDataListToShow: ArrayList<DoctorPlanningData> = ArrayList()
+    val otherDoctorsDataList: ArrayList<DoctorPlanningData> = ArrayList()
+    var otherDoctorsDataListToShow: ArrayList<DoctorPlanningData> = ArrayList()
+
+    private val doctorAccountMapping: ArrayList<Int> = ArrayList()
 
     var divisionsList: List<Division> = listOf()
     var bricksList: List<Brick> = listOf()
@@ -47,7 +57,7 @@ class PlanningCurrentValues(private val activity: PlanningActivity) {
     var allAccountTypesList: List<AccountType> = listOf()
     var classesList: List<Class> = listOf()
 
-    val selectedDoctors = ArrayList<DoctorData>()
+    val selectedDoctors = ArrayList<DoctorPlanningData>()
 
     // current values
     var divisionCurrentValue: IdAndNameObj = divisionStartValue
@@ -66,14 +76,36 @@ class PlanningCurrentValues(private val activity: PlanningActivity) {
         return isDivisionSelected() && isBrickSelected() && isAccTypeSelected() && isClassSelected()
     }
 
-    fun getDoctorListsMap(): Map<String, ArrayList<DoctorData>> {
-        val dataMap: Map<String, ArrayList<DoctorData>> = allAccountTypesList.associate { accType ->
+    fun getDoctorListsMap(list: List<DoctorPlanningData>): Map<String, ArrayList<DoctorPlanningData>> {
+        val dataMap: Map<String, ArrayList<DoctorPlanningData>> = allAccountTypesList.associate { accType ->
             accType.table to ArrayList()
         }
-        doctorsDataListToShow.forEach {
+        list.forEach {
             dataMap[it.doctor.table]?.add(it)
         }
         return dataMap
+    }
+
+    fun distributeDoctorsList() {
+        doctorsDataList.forEach {
+            when(it.catId) {
+                1 -> {
+                    pmDoctorsDataList.add(it)
+                    pmDoctorsDataListToShow.add(it)
+                }
+                2 -> {
+                    amDoctorsDataList.add(it)
+                    amDoctorsDataListToShow.add(it)
+                }
+                3 -> {
+                    otherDoctorsDataList.add(it)
+                    otherDoctorsDataListToShow.add(it)
+                }
+            }
+        }
+        println("9999999999 ${pmDoctorsDataListToShow.size}")
+        println("9999999999 ${amDoctorsDataListToShow.size}")
+        println("9999999999 ${otherDoctorsDataListToShow.size}")
     }
 
     fun getDoctorAccount(doctorData: DoctorData): AccountData? {
@@ -84,8 +116,31 @@ class PlanningCurrentValues(private val activity: PlanningActivity) {
 
         return accountData
     }
+    fun getDoctorAccount2(doctorData: DoctorPlanningData): AccountData? {
+//        val doctorIndex = doctorsDataList.indexOf(doctorData)
+//        println("yyyyy0 $doctorIndex")
+//        println("yyyyy1 ${doctorAccountMapping.size}")
+//        if (doctorIndex >= 0 && doctorIndex < doctorAccountMapping.size) {
+//            val accountIndex = doctorAccountMapping[doctorIndex]
+//            println("yyyyy2 $accountIndex")
+//            println("yyyyy3 ${accountsDataList.size}")
+//            if (accountIndex >= 0 && accountIndex < accountsDataList.size) {
+//                return accountsDataList[accountIndex]
+//            }
+//        }
+        return null
+    }
 
-    fun getDoctorAccountType(doctorData: DoctorData): AccountType? {
+    fun getAccountTypeCategory(table: String): Int? {
+        var accountTypeCategory: Int? = null
+        allAccountTypesList.forEach {
+            if (it.table == table) accountTypeCategory = it.catId
+        }
+
+        return accountTypeCategory
+    }
+
+    fun getDoctorAccountType(doctorData: DoctorPlanningData): AccountType? {
         var accountType: AccountType? = null
         allAccountTypesList.forEach {
             if (it.table == doctorData.doctor.table) accountType = it

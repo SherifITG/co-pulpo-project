@@ -21,3 +21,10 @@ sealed class PlanningBarScreen(
         iconFocused = R.drawable.acual_visit_focus_icon,
     )
 }
+//
+//data class PlanningInnerBarScreen(
+//    val route: String,
+//    val title: String,
+//    val icon: Int,
+//    val iconFocused: Int,
+//)

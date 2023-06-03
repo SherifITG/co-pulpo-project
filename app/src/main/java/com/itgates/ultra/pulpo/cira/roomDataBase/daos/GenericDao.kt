@@ -133,6 +133,9 @@ interface DoctorDao : GenericDao<Doctor> {
     @Query(RelationalRoomQuery.doctorsListQuery)
     suspend fun loadAllDoctorReportData(tableId: IdAndNameTablesNamesEnum): List<DoctorData>
 
+    @Query(RelationalRoomQuery.doctorsPlanningListQuery)
+    suspend fun loadAllDoctorPlanningData(tableId: IdAndNameTablesNamesEnum): List<DoctorPlanningData>
+
     @Query("DELETE FROM ${TablesNames.DoctorTable}")
     suspend fun deleteAll()
 }

@@ -393,7 +393,7 @@ class ActualActivity : ComponentActivity() {
             currentValues.accountCurrentValue = Account(
                 passedPlannedVisit.plannedVisit.itemId, EmbeddedEntity(passedPlannedVisit.accName),
                 passedPlannedVisit.teamId, 0L, 0L,
-                passedPlannedVisit.firstLL,passedPlannedVisit.firstLL,
+                passedPlannedVisit.firstLL,passedPlannedVisit.firstLG,
                 0L, 0L, "", "", "", ""
             )
             currentValues.doctorCurrentValue = Doctor(

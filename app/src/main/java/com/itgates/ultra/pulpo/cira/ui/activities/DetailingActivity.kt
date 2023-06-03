@@ -175,11 +175,13 @@ class DetailingActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(padding_8)
                     ) {
+                        println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ size ${slides.size}")
                         items(slides.size) {
+                            println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$it")
                             Box(modifier = Modifier
                                 .height(50.dp)
                                 .aspectRatio(1F)) {
-                                ButtonFactory(text = it.toString()) {
+                                ButtonFactory(text = (it + 1).toString()) {
                                     coroutineScope.launch {
                                         if (pageRemember.currentPage != it) {
                                             println("lllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
@@ -195,10 +197,22 @@ class DetailingActivity : ComponentActivity() {
             }
             Box {
                 HorizontalPager(state = pageRemember, pageCount = slides.size) { page ->
+                    println("----------------------------------------------------------------------")
+                    println("----------------------------------------------------------------------")
+                    println("----------------------------------------------------------------------")
+                    println("----------------------------------------------------------------------")
+                    println("------------------------------------------------------------------ $page")
                     val folderName = "mySlides" // Specify the folder name
 
-                    val slidesFolder = File(applicationContext.cacheDir, folderName)
+                    var slidesFolder = File(applicationContext.cacheDir, folderName)
                     var file = File(slidesFolder, "${slides[page].id}_${slides[page].filePath}")
+                    if (slides[page].filePath.contains("/")) {
+                        slidesFolder = File(slidesFolder, slides[page].filePath.split("/")[0])
+                        file = File(slidesFolder, "${slides[page].id}_${slides[page].filePath.split("/")[1]}")
+                    }
+                    else {
+                        file = File(slidesFolder, "${slides[page].id}_${slides[page].filePath}")
+                    }
 
                     // for html files if exists
                     val htmlFiles = ArrayList<File>()
@@ -232,14 +246,15 @@ class DetailingActivity : ComponentActivity() {
                         "Image" -> CoilImage(file = file)
                         "Video" -> VideoView(file = file)
                         "PDF" -> PdfViewer(file = file)
-                        "HTML" -> TrialHtmlViewer(file = file)
-//                        "HTML" -> {
-//                            LazyColumn {
-//                                items(htmlFiles) {
-//                                    HtmlViewer(file = it)
-//                                }
-//                            }
-//                        }
+//                        "HTML" -> HtmlViewer(file = file)
+//                        "HTML" -> HtmlViewer(file = htmlFiles.first())
+                        "HTML" -> {
+                            LazyColumn {
+                                items(htmlFiles) {
+                                    HtmlViewer(file = it)
+                                }
+                            }
+                        }
                     }
                 }
                 Box(
@@ -520,6 +535,8 @@ class DetailingActivity : ComponentActivity() {
                     it.settings.useWideViewPort = true
 
                     println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+                    if (file.exists())
+                        println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ : ${file.absolutePath}")
 //                    it.loadData(content, "text/html", "UTF-8")
                     it.loadUrl(file.absolutePath)
 

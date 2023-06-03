@@ -45,7 +45,6 @@ fun PlannedNavBar(navController: NavHostController) {
         PlannedBarScreen.PmTap,
         PlannedBarScreen.OtherTap,
         PlannedBarScreen.OfficeWorkTap
-
     )
 
     val navStackBackEntry by navController.currentBackStackEntryAsState()

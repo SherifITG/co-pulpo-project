@@ -275,10 +275,11 @@ data class OnlinePresentationData(
     val brand_id: Long,
     val team_id: Long,
     val Product: String,
+    val structure: String,
 ) {
     fun toRoomPresentation(): Presentation {
         return Presentation(
-            id, EmbeddedEntity(name), description, active, product_id, team_id, Product
+            id, EmbeddedEntity(name), description, active, product_id, team_id, Product, structure
         )
     }
 }
@@ -293,10 +294,11 @@ data class OnlineSlideData(
     val brand_id: Long,
     val slide_type: String,
     val file_path: String,
+    val structure: String,
 ) {
     fun toRoomSlide(): Slide {
         return Slide(
-            id, EmbeddedEntity(title), description, contents, presentation_id, product_id, slide_type, file_path
+            id, EmbeddedEntity(title), description, contents, presentation_id, product_id, slide_type, file_path, structure
         )
     }
 }

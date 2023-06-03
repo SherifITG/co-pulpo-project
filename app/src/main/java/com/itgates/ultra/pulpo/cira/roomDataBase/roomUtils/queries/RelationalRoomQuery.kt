@@ -117,11 +117,34 @@ object RelationalRoomQuery {
                 " ON acc.brick_id = brick.id"
 
     const val doctorsListQuery =
-        "SELECT doc.*, spec.embedded_entity_name As specialityName" +
+        "SELECT doc.*, spec.embedded_entity_name AS specialityName" +
 
                 " FROM ${TablesNames.DoctorTable} AS doc" +
                 " LEFT JOIN ${TablesNames.IdAndNameTable} AS spec" +
                 " ON doc.specialization_id = spec.id AND spec.table_identifier = :tableId"
+
+    const val doctorsPlanningListQuery =
+        "SELECT doc.*, spec.embedded_entity_name AS specialityName, acc.division_id AS divId," +
+                " acc.brick_id AS brickId, acc.class_id AS classId," +
+                " div.embedded_division_name As divName," +
+                " accType.embedded_account_type_name AS accTypeName," +
+                " acc.embedded_account_name AS accName," +
+                " cls.embedded_class_name AS className," +
+                " brick.embedded_brick_name AS brickName, accType.cat_id AS catId" +
+
+                " FROM ${TablesNames.DoctorTable} AS doc" +
+                " LEFT JOIN ${TablesNames.IdAndNameTable} AS spec" +
+                " ON doc.specialization_id = spec.id AND spec.table_identifier = :tableId" +
+                " LEFT JOIN ${TablesNames.AccountTable} AS acc" +
+                " ON doc.account_id = acc.id AND doc.tbl = acc.tbl" +
+                " LEFT JOIN ${TablesNames.AccountTypeTable} AS accType" +
+                " ON doc.tbl = accType.tbl" +
+                " LEFT JOIN ${TablesNames.DivisionTable} AS div" +
+                " ON acc.division_id = div.id" +
+                " LEFT JOIN ${TablesNames.ClassTable} AS cls" +
+                " ON acc.class_id = cls.id" +
+                " LEFT JOIN ${TablesNames.BrickTable} AS brick" +
+                " ON acc.brick_id = brick.id"
 
     private const val newPlanListSelectPart =
         "SELECT newPlan.*, div.embedded_division_name As divName, div.team_id As teamId," +

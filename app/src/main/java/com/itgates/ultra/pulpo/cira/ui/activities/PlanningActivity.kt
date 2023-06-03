@@ -10,7 +10,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import com.itgates.ultra.pulpo.cira.ui.composeUI.PlanningUI
 import com.itgates.ultra.pulpo.cira.ui.composeUI.AppBarComposeView
 import com.itgates.ultra.pulpo.cira.ui.theme.PulpoUltraTheme
 import com.itgates.ultra.pulpo.cira.viewModels.CacheViewModel
@@ -57,15 +56,15 @@ class PlanningActivity : ComponentActivity() {
     }
     private fun setObservers() {
         cacheViewModel.accountReportData.observe(this@PlanningActivity) {
-            println(it.size)
+            println("io io io ${it.size}")
             currentValues.accountsDataList = it
             currentValues.accountsDataListToShow = it
             isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
-        cacheViewModel.doctorReportData.observe(this@PlanningActivity) {
-            println(it.size)
+        cacheViewModel.doctorPlanningData.observe(this@PlanningActivity) {
+            println("io io io ${it.size}")
             currentValues.doctorsDataList = it
-            currentValues.doctorsDataListToShow = it
+            currentValues.distributeDoctorsList()
             isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
 
@@ -87,6 +86,8 @@ class PlanningActivity : ComponentActivity() {
         cacheViewModel.allAccountTypeData.observe(this@PlanningActivity) {
             currentValues.allAccountTypesList = it
             isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
+
+            currentValues.distributeDoctorsList()
         }
 
         cacheViewModel.classesData.observe(this@PlanningActivity) {
@@ -97,7 +98,7 @@ class PlanningActivity : ComponentActivity() {
 
     private fun loadAccountAndDoctorData() {
         cacheViewModel.loadAllAccountReportData()
-        cacheViewModel.loadAllDoctorReportData()
+        cacheViewModel.loadAllDoctorPlanningData()
 
     }
 
@@ -123,7 +124,7 @@ class PlanningActivity : ComponentActivity() {
 
     fun saveNewPlans(visitDate: String) {
         val newPlanList = currentValues.selectedDoctors.stream().map {
-            val doctorAccount = currentValues.getDoctorAccount(it)
+            val doctorAccount = currentValues.getDoctorAccount2(it)
             val doctorAccountType = currentValues.getDoctorAccountType(it)
             currentValues.createNewPlanInstance(
                 doctorAccount!!.account.divisionId, doctorAccountType!!.id, it.doctor.accountId,
@@ -133,30 +134,55 @@ class PlanningActivity : ComponentActivity() {
         cacheViewModel.saveNewPlans(newPlanList)
     }
 
-    fun applyFilters(divId: Long, brickId: Long, classId: Long, accTypeTable: String) {
-        println(" 99999999999999999999999999999999 $divId 999 $brickId 999 $classId 999 $accTypeTable")
-        var accountsFiltered = currentValues.accountsDataList
+    fun applyFilters(divId: Long, brickId: Long, classId: Long, accTypeTable: String, category: Int) {
+        var doctorsFiltered = when(category) {
+            1 -> currentValues.pmDoctorsDataList
+            2 -> currentValues.amDoctorsDataList
+            3 -> currentValues.otherDoctorsDataList
+            else -> currentValues.otherDoctorsDataList
+        }
 
         // division filter step
         if (divId != -1L) {
-            accountsFiltered = accountsFiltered.stream().filter { it.account.divisionId == divId }.toList()
+            doctorsFiltered = ArrayList(
+                doctorsFiltered.stream().filter {
+                    it.divId == divId
+                }.toList()
+            )
         }
 
         // brick filter step
         if (brickId != -1L) {
-            accountsFiltered = accountsFiltered.stream().filter { it.account.brickId == brickId }.toList()
+            doctorsFiltered = ArrayList(
+                doctorsFiltered.stream().filter {
+                    it.brickId == brickId
+                }.toList()
+            )
         }
 
         // class filter step
         if (classId != -1L) {
-            accountsFiltered = accountsFiltered.stream().filter { it.account.classId == classId }.toList()
+            doctorsFiltered = ArrayList(
+                doctorsFiltered.stream().filter {
+                    it.classId == classId
+                }.toList()
+            )
         }
 
         // account type filter step
         if (accTypeTable != "crm_All") {
-            accountsFiltered = accountsFiltered.stream().filter { it.account.table == accTypeTable }.toList()
+            doctorsFiltered = ArrayList(
+                doctorsFiltered.stream().filter {
+                    it.doctor.table == accTypeTable
+                }.toList()
+            )
         }
 
-        currentValues.accountsDataListToShow = accountsFiltered
+        when(category) {
+            1 -> currentValues.pmDoctorsDataListToShow = doctorsFiltered
+            2 -> currentValues.amDoctorsDataListToShow = doctorsFiltered
+            3 -> currentValues.otherDoctorsDataListToShow = doctorsFiltered
+            else -> currentValues.otherDoctorsDataListToShow = doctorsFiltered
+        }
     }
 }

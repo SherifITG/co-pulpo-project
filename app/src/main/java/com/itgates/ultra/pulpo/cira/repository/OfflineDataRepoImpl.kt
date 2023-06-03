@@ -183,6 +183,10 @@ class OfflineDataRepoImpl @Inject constructor(
         return doctorDao.loadAllDoctorReportData(IdAndNameTablesNamesEnum.SPECIALITY)
     }
 
+    override suspend fun loadAllDoctorPlanningData(): List<DoctorPlanningData> {
+        return doctorDao.loadAllDoctorPlanningData(IdAndNameTablesNamesEnum.SPECIALITY)
+    }
+
 
     override suspend fun uploadedActualVisitData(actualVisitDTO: ActualVisitDTO) {
         return actualVisitDao.updateSyncedActualVisits(

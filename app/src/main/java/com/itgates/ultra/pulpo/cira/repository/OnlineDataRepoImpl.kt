@@ -41,6 +41,9 @@ class OnlineDataRepoImpl @Inject constructor(
         lineId: String,
         divId: String
     ): AccountsAndDoctorsDetailsPharmaResponse {
+        println("OnlineDataRepoImpl ===================== $lineId line")
+        println("OnlineDataRepoImpl ===================== $FN fn")
+        println("OnlineDataRepoImpl ===================== $divId div")
         return dataRetrofitApi.accountsAndDoctorsDetailsAsync(headers, FN, lineId, divId).await()
     }
 

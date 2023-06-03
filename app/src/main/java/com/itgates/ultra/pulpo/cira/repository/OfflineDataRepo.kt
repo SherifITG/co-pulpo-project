@@ -43,6 +43,7 @@ interface OfflineDataRepo {
     suspend fun loadAllAccountReportData(): List<AccountData>
     suspend fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long)
     suspend fun loadAllDoctorReportData(): List<DoctorData>
+    suspend fun loadAllDoctorPlanningData(): List<DoctorPlanningData>
 
     suspend fun uploadedActualVisitData(actualVisitDTO: ActualVisitDTO)
     suspend fun insertActualVisitWithValidation(actualVisit: ActualVisit): Long

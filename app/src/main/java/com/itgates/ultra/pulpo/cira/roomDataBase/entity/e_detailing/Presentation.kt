@@ -17,5 +17,6 @@ data class Presentation(
     @ColumnInfo("active") val active: Int,
     @ColumnInfo("product_id") val productId: Long,
     @ColumnInfo("team_id") val teamId: Long,
-    @ColumnInfo("product_name") val productName: String
+    @ColumnInfo("product_name") val productName: String,
+    @ColumnInfo("structure") val structure: String,
 ): IdAndNameObj(id, embedded)

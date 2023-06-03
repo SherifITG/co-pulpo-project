@@ -147,7 +147,7 @@ fun AccountReportScreen(
                                             activity.currentValues.classCurrentValue.id,
                                             (activity.currentValues.accTypeCurrentValue as AccountType).table
                                         )
-                                        isDataChangedToRefresh.value = !isFilterExpanded.value
+                                        isDataChangedToRefresh.value = !isDataChangedToRefresh.value
                                     }
                                     else {
                                         Utilities.createCustomToast(activity.applicationContext, "Choose All filter first")
@@ -208,7 +208,7 @@ fun AccountReportScreen(
                                     visible = isExpanded.value == index
                                 ) {
                                     val doctors = activity.currentValues.doctorsDataList.stream().filter {
-                                        it.doctor.accountId == item.account.id
+                                        it.doctor.accountId == item.account.id && it.doctor.table == item.account.table // TODO
                                     }.toList()
                                     Column() {
                                         TextFactory(text = "Division: ${item.divName}")

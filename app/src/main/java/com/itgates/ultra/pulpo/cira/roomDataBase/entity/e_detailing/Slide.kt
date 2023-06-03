@@ -18,5 +18,6 @@ data class Slide(
     @ColumnInfo("presentation_id") val presentationId: Long,
     @ColumnInfo("product_id") val productId: Long,
     @ColumnInfo("slide_type") val slideType: String,
-    @ColumnInfo("file_path") val filePath: String
+    @ColumnInfo("file_path") val filePath: String,
+    @ColumnInfo("structure") val structure: String,
 ): IdAndNameObj(id, embedded)

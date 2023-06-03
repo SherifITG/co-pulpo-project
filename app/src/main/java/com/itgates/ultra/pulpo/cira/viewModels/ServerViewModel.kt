@@ -49,28 +49,33 @@ class ServerViewModel @Inject constructor(
     private val _fileData = MutableLiveData<File>()
     val fileData: LiveData<File> get() = _fileData
 
-    suspend fun getFile(context: Context, fileName: String, slideId: Long) {
+    private suspend fun getFile(context: Context, fileName: String, fileStructure: String, slideId: Long) {
         val job = CoroutineManager.getScope().launch {
             try {
                 println("------------------------------ 33333333333333333333333333333333333333")
-                val responseBody = onlineDataRepo.getFile(fileName)
+                val responseBody = onlineDataRepo.getFile(fileStructure.plus("/").plus(fileName))
 
                 withContext(Dispatchers.IO) {
                     println("------------------------------ 4444444444444444444444444444444444")
 
                     val folderName = "mySlides" // Specify the folder name
 
-                    val slidesFolder = File(context.cacheDir, folderName)
+                    var slidesFolder = File(context.cacheDir, folderName)
+                    if (!slidesFolder.exists()) {
+                        slidesFolder.mkdirs()
+                    }
+                    slidesFolder = File(slidesFolder, fileStructure)
                     if (!slidesFolder.exists()) {
                         slidesFolder.mkdirs()
                     }
 
-                    val file = File(slidesFolder, "${slideId}_$fileName")
-                    println("------------------------------ 6666666666666666666666666666666666")
+                    var file = File(slidesFolder, "${slideId}_$fileName")
 
-
+                    println("------------------------------ 666666666666666666666666666667")
                     val inputStream = responseBody.byteStream()
+                    println("------------------------------ 666666666666666666666666666668")
                     val outputStream = FileOutputStream(file)
+                    println("------------------------------ 666666666666666666666666666669")
 
                     val buffer = ByteArray(4096)
                     var bytesRead: Int
@@ -92,10 +97,6 @@ class ServerViewModel @Inject constructor(
                         println("159159159159159159159159---------------------------159159159159159159159159")
                         println("159159159159159159159159--------------------------- ${destinationFile.absolutePath}")
                     }
-
-//                    launch(Dispatchers.Main) {
-//                        _fileData.value = file
-//                    }
                 }
             } catch (e: Exception) {
                 Log.d("ServerViewModel", "getFile failed $e")
@@ -186,7 +187,7 @@ class ServerViewModel @Inject constructor(
                 )
 
                 response.Data.Slides.forEach {
-                    getFile(context, it.file_path, it.id)
+                    getFile(context, it.file_path, it.structure, it.id)
                 }
 
                 _presentationAndSlideData.value = response

@@ -156,9 +156,10 @@ fun PlanningScreen(
                                             activity.currentValues.divisionCurrentValue.id,
                                             activity.currentValues.brickCurrentValue.id,
                                             activity.currentValues.classCurrentValue.id,
-                                            (activity.currentValues.accTypeCurrentValue as AccountType).table
+                                            (activity.currentValues.accTypeCurrentValue as AccountType).table,
+                                            0 // for new apply filters
                                         )
-                                        isDataChangedToRefresh.value = !isFilterExpanded.value
+                                        isDataChangedToRefresh.value = !isDataChangedToRefresh.value
                                     }
                                     else {
                                         Utilities.createCustomToast(activity.applicationContext, "Choose All filter first")
@@ -176,7 +177,7 @@ fun PlanningScreen(
                 verticalArrangement = Arrangement.spacedBy(padding_8)
             ) {
 
-                activity.currentValues.getDoctorListsMap().forEach { (crm_table, list) ->
+                activity.currentValues.getDoctorListsMap(activity.currentValues.doctorsDataList).forEach { (crm_table, list) ->
                     if (list.isNotEmpty()) {
                         val accountType = activity.currentValues.allAccountTypesList.find {
                             it.table == crm_table
@@ -229,7 +230,7 @@ fun PlanningScreen(
                                         .padding(padding_16),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    val doctorAccount = activity.currentValues.getDoctorAccount(item)
+                                    val doctorAccount = activity.currentValues.getDoctorAccount2(item)
                                     Column(modifier = Modifier.weight(1F)) {
                                         TextFactory(
                                             text = "id: (${item.doctor.id})",
@@ -283,7 +284,268 @@ fun PlanningScreen(
             }
         }
         Box(
-            modifier = Modifier.fillMaxWidth().padding(bottom = padding_8),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = padding_8),
+            contentAlignment = Alignment.Center
+        ) {
+            ButtonFactory(text = "   next   ") {
+                activity.currentValues.tapNavigatingFun()
+            }
+        }
+    }
+}
+
+@Composable
+fun PlanningUI(activity: PlanningActivity, shiftIndex: Int) {
+    val isRoomDataFetchedToRefresh = activity.isRoomDataFetchedToRefresh.collectAsState()
+    val isDataChangedToRefresh = remember { mutableStateOf(false) }
+    when(isRoomDataFetchedToRefresh.value) {
+        in 0..5 -> {
+            when(isDataChangedToRefresh.value) {
+                true, false -> {
+                    PlanningScreen(activity, isDataChangedToRefresh, shiftIndex)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PlanningScreen(
+    activity: PlanningActivity,
+    isDataChangedToRefresh: MutableState<Boolean>,
+    shiftIndex: Int
+) {
+    val isFilterExpanded = remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .padding(top = padding_4)
+            .padding(horizontal = padding_16),
+        verticalArrangement = Arrangement.spacedBy(padding_8)
+    ) {
+        Card(
+            shape = ITGatesCardCornerShape,
+            modifier = Modifier,
+            elevation = padding_16
+        ) {
+            Box(modifier = Modifier) {
+                Column() {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { isFilterExpanded.value = !isFilterExpanded.value }
+                            .padding(horizontal = padding_12, vertical = padding_8),
+                        horizontalArrangement = Arrangement.spacedBy(padding_8)
+                    ) {
+                        Box(modifier = Modifier.weight(1F)) {
+                            TextFactory(text = "Filter")
+                        }
+                        Icon(
+                            modifier = Modifier.size(padding_24),
+                            painter =
+                            if (isFilterExpanded.value) {
+                                painterResource(R.drawable.arrow_drop_up)
+                            } else {
+                                painterResource(R.drawable.arrow_drop_down)
+                            },
+                            contentDescription = "Filter Icon",
+                            tint = ITGatesPrimaryColor
+                        )
+                    }
+                    AnimatedVisibility(
+                        modifier = Modifier
+                            .animateContentSize(
+                                animationSpec = SpringSpec(
+                                    dampingRatio = Spring.DampingRatioLowBouncy,
+                                    stiffness = Spring.StiffnessLow
+                                )
+                            ),
+                        visible = isFilterExpanded.value
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = padding_8),
+                            verticalArrangement = Arrangement.spacedBy(padding_8)
+                        ) {
+                            PlanningFilterItemComposeView(
+                                "Division",
+                                activity,
+                                activity.currentValues.divisionsList,
+                                remember{ mutableStateOf(IdAndNameObj(0L, EmbeddedEntity("Select Division"))) },
+                                isDataChangedToRefresh
+                            )
+                            PlanningFilterItemComposeView(
+                                "Brick",
+                                activity,
+                                activity.currentValues.bricksList,
+                                remember{ mutableStateOf(IdAndNameObj(0L, EmbeddedEntity("Select Brick"))) },
+                                isDataChangedToRefresh
+                            )
+                            PlanningFilterItemComposeView(
+                                "Account Type",
+                                activity,
+                                activity.currentValues.accountTypesList,
+                                remember{ mutableStateOf(IdAndNameObj(0L, EmbeddedEntity("Select Acc Type"))) },
+                                isDataChangedToRefresh
+                            )
+                            PlanningFilterItemComposeView(
+                                "class",
+                                activity,
+                                activity.currentValues.classesList,
+                                remember{ mutableStateOf(IdAndNameObj(0L, EmbeddedEntity("Select Class"))) },
+                                isDataChangedToRefresh
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = padding_16),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                ButtonFactory(text = "apply", withPercentage = 0.5F) {
+                                    if (activity.currentValues.isAllDataReady()) {
+                                        activity.applyFilters(
+                                            activity.currentValues.divisionCurrentValue.id,
+                                            activity.currentValues.brickCurrentValue.id,
+                                            activity.currentValues.classCurrentValue.id,
+                                            (activity.currentValues.accTypeCurrentValue as AccountType).table,
+                                            shiftIndex
+                                        )
+                                        println("--------------------------------------------- ${isDataChangedToRefresh.value}")
+                                        isDataChangedToRefresh.value = !isDataChangedToRefresh.value
+                                        println("--------------------------------------------- ${isDataChangedToRefresh.value}")
+                                    }
+                                    else {
+                                        Utilities.createCustomToast(activity.applicationContext, "Choose All filter first")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Box(modifier = Modifier.weight(1F)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(padding_8)
+            ) {
+                val list = when(shiftIndex) {
+                    1 -> activity.currentValues.getDoctorListsMap(activity.currentValues.pmDoctorsDataListToShow)
+                    2 -> activity.currentValues.getDoctorListsMap(activity.currentValues.amDoctorsDataListToShow)
+                    3 -> activity.currentValues.getDoctorListsMap(activity.currentValues.otherDoctorsDataListToShow)
+                    else -> activity.currentValues.getDoctorListsMap(activity.currentValues.otherDoctorsDataListToShow)
+                }
+
+                list.forEach { (crm_table, list) ->
+                    if (list.isNotEmpty()) {
+                        val accountType = activity.currentValues.allAccountTypesList.find {
+                            it.table == crm_table
+                        }
+                        item {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(padding_8)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1F)
+                                        .height(padding_2)
+                                        .background(ITGatesPrimaryColor)
+                                )
+                                TextFactory(text = "(${accountType?.embedded?.name ?: "null account type"})")
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1F)
+                                        .height(padding_2)
+                                        .background(ITGatesPrimaryColor)
+                                )
+                            }
+                        }
+                        items(list) { item ->
+                            Card(
+                                shape = ITGatesCardCornerShape,
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                elevation = padding_16
+                            ) {
+                                val isSelected = remember {
+                                    mutableStateOf(activity.currentValues.selectedDoctors.contains(item))
+                                }
+                                isSelected.value = activity.currentValues.selectedDoctors.contains(item)
+
+                                Row(
+                                    modifier = Modifier
+                                        .clickable {
+                                            if (isSelected.value) {
+                                                activity.currentValues.selectedDoctors.remove(item)
+                                            } else {
+                                                activity.currentValues.selectedDoctors.add(item)
+                                            }
+                                            isSelected.value = !isSelected.value
+                                        }
+                                        .background(
+                                            if (isSelected.value) ITGatesIconGreyColor else ITGatesWhiteColor
+                                        )
+                                        .padding(padding_16),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Column(modifier = Modifier.weight(1F)) {
+                                        TextFactory(
+                                            text = "id: (${item.doctor.id})",
+                                            color = if (isSelected.value) ITGatesSecondaryColor else ITGatesPrimaryColor
+                                        )
+                                        TextFactory(
+                                            text = item.doctor.embedded.name,
+                                            color = if (isSelected.value) ITGatesSecondaryColor else ITGatesPrimaryColor
+                                        )
+                                        TextFactory(
+                                            buildAnnotatedString {
+                                                withStyle(
+                                                    style = SpanStyle(
+                                                        if (isSelected.value) ITGatesSecondaryColor else ITGatesPrimaryColor
+                                                    )
+                                                ) {
+                                                    append("${item.accName} ")
+                                                }
+                                                withStyle(
+                                                    style = SpanStyle(
+                                                        if (isSelected.value) ITGatesWhiteColor else ITGatesSecondaryColor
+                                                    )
+                                                ) {
+                                                    append("(${item.accTypeName})")
+                                                }
+                                            },
+                                            size = 17.sp
+                                        )
+                                    }
+                                    if (isSelected.value) {
+                                        Box(
+                                            modifier = Modifier
+                                                .clip(ITGatesCircularCornerShape)
+                                                .padding(padding_8)
+                                        ) {
+                                            Icon(
+                                                modifier = Modifier.size(padding_40),
+                                                painter = painterResource(R.drawable.check_circle_icon),
+                                                contentDescription = "Location Icon",
+                                                tint = ITGatesIconGreenColor
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = padding_8),
             contentAlignment = Alignment.Center
         ) {
             ButtonFactory(text = "   next   ") {
@@ -454,7 +716,9 @@ fun PlanningSaveScreen(activity: PlanningActivity) {
         }
 
         Box(
-            modifier = Modifier.fillMaxWidth().padding(bottom = padding_8),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = padding_8),
             contentAlignment = Alignment.Center
         ) {
             ButtonFactory(text = "   save plans   ") {

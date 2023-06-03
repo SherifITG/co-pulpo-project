@@ -64,6 +64,8 @@ class CacheViewModel @Inject constructor(
     val accountReportData: LiveData<List<AccountData>> get() = _accountReportData
     private val _doctorReportData = MutableLiveData<List<DoctorData>>()
     val doctorReportData: LiveData<List<DoctorData>> get() = _doctorReportData
+    private val _doctorPlanningData = MutableLiveData<List<DoctorPlanningData>>()
+    val doctorPlanningData: LiveData<List<DoctorPlanningData>> get() = _doctorPlanningData
 
     private val _fileData = MutableLiveData<ItgFile>()
     val fileData: LiveData<ItgFile> get() = _fileData
@@ -340,7 +342,7 @@ class CacheViewModel @Inject constructor(
                 _accountReportData.value = offlineDataRepo.loadAllAccountReportData()
             } catch (e: Exception) {
                 _accountReportData.value = FaultedArrayList()
-                Log.d("CacheViewModel", "loadAllAccountReportData: failed $e")
+                Log.d("CacheViewModel4", "loadAllAccountReportData: failed $e")
             }
         }
     }
@@ -361,7 +363,18 @@ class CacheViewModel @Inject constructor(
                 _doctorReportData.value = offlineDataRepo.loadAllDoctorReportData()
             } catch (e: Exception) {
                 _doctorReportData.value = FaultedArrayList()
-                Log.d("CacheViewModel", "loadAllDoctorReportData: failed $e")
+                Log.d("CacheViewModel3", "loadAllDoctorReportData: failed $e")
+            }
+        }
+    }
+
+    fun loadAllDoctorPlanningData() {
+        CoroutineManager.getScope().launch {
+            try {
+                _doctorPlanningData.value = offlineDataRepo.loadAllDoctorPlanningData()
+            } catch (e: Exception) {
+                _doctorPlanningData.value = FaultedArrayList()
+                Log.d("CacheViewModel6", "loadAllDoctorPlanningData: failed $e")
             }
         }
     }
