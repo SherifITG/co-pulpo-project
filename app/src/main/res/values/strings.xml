@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">Pulpo Ultra</string>
+    <string name="app_name">@string/project_name</string>
 
     <string name="BASE_URL_PHARMA_2">https://pulpo-cira.cloud/itg_atlas_s_newapp/android/</string>
-    <string name="BASE_URL_PHARMA">https://pulpo-cira.cloud/itg_pulpoultra_cira/android/</string>
+    <string name="BASE_URL_PHARMA_CIRA">https://pulpo-cira.cloud/itg_pulpoultra_cira/android/</string>
+    <string name="BASE_URL_PHARMA_ATM">https://pulpo-atm.cloud/itg_pulpoultra_atm/android/</string>
     <string name="FILES_BASE_URL_PHARMA">https://pulpo-cira.cloud/crm/edetailing_files/</string>
 
     <string name="no_internet_connection">No Internet Connection</string>

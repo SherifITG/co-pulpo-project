@@ -116,20 +116,6 @@ class PlanningCurrentValues(private val activity: PlanningActivity) {
 
         return accountData
     }
-    fun getDoctorAccount2(doctorData: DoctorPlanningData): AccountData? {
-//        val doctorIndex = doctorsDataList.indexOf(doctorData)
-//        println("yyyyy0 $doctorIndex")
-//        println("yyyyy1 ${doctorAccountMapping.size}")
-//        if (doctorIndex >= 0 && doctorIndex < doctorAccountMapping.size) {
-//            val accountIndex = doctorAccountMapping[doctorIndex]
-//            println("yyyyy2 $accountIndex")
-//            println("yyyyy3 ${accountsDataList.size}")
-//            if (accountIndex >= 0 && accountIndex < accountsDataList.size) {
-//                return accountsDataList[accountIndex]
-//            }
-//        }
-        return null
-    }
 
     fun getAccountTypeCategory(table: String): Int? {
         var accountTypeCategory: Int? = null

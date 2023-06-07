@@ -124,11 +124,10 @@ class PlanningActivity : ComponentActivity() {
 
     fun saveNewPlans(visitDate: String) {
         val newPlanList = currentValues.selectedDoctors.stream().map {
-            val doctorAccount = currentValues.getDoctorAccount2(it)
             val doctorAccountType = currentValues.getDoctorAccountType(it)
             currentValues.createNewPlanInstance(
-                doctorAccount!!.account.divisionId, doctorAccountType!!.id, it.doctor.accountId,
-                it.doctor.id, 0, visitDate, 0, doctorAccount.account.teamId
+                it.divId, doctorAccountType!!.id, it.doctor.accountId,
+                it.doctor.id, 0, visitDate, 0, it.doctor.teamId
             )
         }.toList()
         cacheViewModel.saveNewPlans(newPlanList)

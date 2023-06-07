@@ -13,5 +13,7 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "Pulpo Ultra"
+
+//TODO company versions
+rootProject.name = "Pulpo Ultra ${settings.ext.project_name}"
 include ':app'

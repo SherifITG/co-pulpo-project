@@ -230,7 +230,6 @@ fun PlanningScreen(
                                         .padding(padding_16),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    val doctorAccount = activity.currentValues.getDoctorAccount2(item)
                                     Column(modifier = Modifier.weight(1F)) {
                                         TextFactory(
                                             text = "id: (${item.doctor.id})",
@@ -248,7 +247,7 @@ fun PlanningScreen(
                                                     )
                                                 ) {
                                                     append(
-                                                        "${doctorAccount?.account?.embedded?.name}: " ?: "null account: "
+                                                        "${item.accName}: "
                                                     )
                                                 }
                                                 withStyle(
@@ -256,7 +255,7 @@ fun PlanningScreen(
                                                         if (isSelected.value) ITGatesWhiteColor else ITGatesSecondaryColor
                                                     )
                                                 ) {
-                                                    append("(${accountType?.embedded?.name ?: "null account type"})")
+                                                    append("(${item.accTypeName})")
                                                 }
                                             },
                                             size = 17.sp

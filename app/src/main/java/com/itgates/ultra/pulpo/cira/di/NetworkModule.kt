@@ -45,7 +45,7 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .client(okHttpClient)
-            .baseUrl(application.getString(R.string.BASE_URL_PHARMA))
+            .baseUrl("${application.getString(R.string.BASE_URL_PHARMA)}/android/")
     }
 
     @Singleton

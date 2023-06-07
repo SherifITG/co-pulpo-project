@@ -2,6 +2,7 @@ package com.itgates.ultra.pulpo.cira.ui.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.provider.Settings
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -191,7 +192,7 @@ class LoginActivity : ComponentActivity() {
 
     private fun dealWithLoginResponse(loginDataResponse: LoginPharmaResponse) {
         CoroutineManager.getScope().launch {
-            if(loginDataResponse.Data.isNotEmpty()){
+            if (loginDataResponse.Data.isNotEmpty()) {
                 val userData = loginDataResponse.Data[0]
                 val dataStoreService = cacheViewModel.getDataStoreService()
                 val isNewUser = dataStoreService.getDataObjAsync(PreferenceKeys.USER_ID).await().isEmpty()
@@ -205,7 +206,7 @@ class LoginActivity : ComponentActivity() {
                 dealWithAuthData(dataStoreService, userData)
                 Utilities.navigateToMainActivity(this@LoginActivity, isNewUser)
             }
-            else{
+            else {
                 Utilities.createCustomToast(applicationContext, "There is error with login, Please try again")
             }
         }

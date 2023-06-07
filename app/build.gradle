@@ -10,7 +10,9 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.itgates.ultra.pulpo.cira"
+        //TODO company versions
+//        applicationId "com.itgates.ultra.pulpo.cira"
+        applicationId "com.itgates.ultra.pulpo.${project.findProperty("project_package_name_postfix")}"
         minSdk 26
         targetSdk 33
         versionCode 4
@@ -20,7 +22,13 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-    }
+
+        buildConfigField("String", "API_LINK", "\"${project.findProperty("api_link")}\"")
+        applicationVariants.all { variant ->
+            variant.resValue "string", "project_name", "Pulpo ${project.property('project_name')}"
+            variant.resValue "string", "BASE_URL_PHARMA", "${project.property('api_link')}"
+        }
+}
 
     buildTypes {
         release {
