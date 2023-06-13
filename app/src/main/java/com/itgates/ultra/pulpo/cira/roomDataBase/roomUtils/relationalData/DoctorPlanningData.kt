@@ -10,6 +10,7 @@ class DoctorPlanningData (
     val classId: Long,
     val brickId: Long,
     val divName: String,
+    val accTypeId: Long,
     val accTypeName: String,
     val accName: String,
     val className: String?,

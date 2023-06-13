@@ -126,7 +126,7 @@ class PlanningActivity : ComponentActivity() {
         val newPlanList = currentValues.selectedDoctors.stream().map {
             val doctorAccountType = currentValues.getDoctorAccountType(it)
             currentValues.createNewPlanInstance(
-                it.divId, doctorAccountType!!.id, it.doctor.accountId,
+                it.divId, it.accTypeId, it.doctor.accountId,
                 it.doctor.id, 0, visitDate, 0, it.doctor.teamId
             )
         }.toList()

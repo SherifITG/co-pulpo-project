@@ -15,6 +15,7 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.relationalData.Accoun
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.relationalData.DoctorData
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.relationalData.DoctorPlanningData
 import com.itgates.ultra.pulpo.cira.ui.activities.PlanningActivity
+import com.itgates.ultra.pulpo.cira.utilities.Utilities
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 import kotlin.streams.toList
@@ -65,7 +66,10 @@ class PlanningCurrentValues(private val activity: PlanningActivity) {
     var accTypeCurrentValue: IdAndNameObj = accTypeStartValue
     var classCurrentValue: IdAndNameObj = classStartValue
 
-    var tapNavigatingFun = {}
+    var tapNavigatingFun = {
+        // any message
+        Utilities.createCustomToast(activity, "Some error, You can refresh the activity our app")
+    }
 
     fun isDivisionSelected(): Boolean = divisionCurrentValue !is IdAndNameEntity
     fun isBrickSelected(): Boolean = brickCurrentValue !is IdAndNameEntity
@@ -103,27 +107,6 @@ class PlanningCurrentValues(private val activity: PlanningActivity) {
                 }
             }
         }
-        println("9999999999 ${pmDoctorsDataListToShow.size}")
-        println("9999999999 ${amDoctorsDataListToShow.size}")
-        println("9999999999 ${otherDoctorsDataListToShow.size}")
-    }
-
-    fun getDoctorAccount(doctorData: DoctorData): AccountData? {
-        var accountData: AccountData? = null
-        accountsDataList.forEach {
-            if (it.account.id == doctorData.doctor.accountId) accountData = it
-        }
-
-        return accountData
-    }
-
-    fun getAccountTypeCategory(table: String): Int? {
-        var accountTypeCategory: Int? = null
-        allAccountTypesList.forEach {
-            if (it.table == table) accountTypeCategory = it.catId
-        }
-
-        return accountTypeCategory
     }
 
     fun getDoctorAccountType(doctorData: DoctorPlanningData): AccountType? {

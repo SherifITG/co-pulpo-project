@@ -25,12 +25,20 @@ import com.itgates.ultra.pulpo.cira.ui.activities.plannedTabs.PlannedBarScreen
 import com.itgates.ultra.pulpo.cira.ui.activities.plannedTabs.PlannedNavBar
 import com.itgates.ultra.pulpo.cira.ui.composeUI.TextFactory
 import com.itgates.ultra.pulpo.cira.ui.theme.*
+import com.itgates.ultra.pulpo.cira.utilities.Utilities
 
 @Composable
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 fun PlanningNavigation(activity: PlanningActivity) {
     val navController = rememberNavController()
-    activity.currentValues.tapNavigatingFun = { navController.navigate(PlanningBarScreen.SaveTap.route)}
+    activity.currentValues.tapNavigatingFun = {
+        if (activity.currentValues.selectedDoctors.isNotEmpty()) {
+            navController.navigate(PlanningBarScreen.SaveTap.route)
+        }
+        else {
+            Utilities.createCustomToast(activity, "Please choose 1 doctor at least")
+        }
+    }
     Scaffold { PlanningNavGraph(navController = navController, activity = activity) }
 }
 

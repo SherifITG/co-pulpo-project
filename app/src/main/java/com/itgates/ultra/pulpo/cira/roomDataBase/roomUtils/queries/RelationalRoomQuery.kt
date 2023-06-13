@@ -127,7 +127,7 @@ object RelationalRoomQuery {
         "SELECT doc.*, spec.embedded_entity_name AS specialityName, acc.division_id AS divId," +
                 " acc.brick_id AS brickId, acc.class_id AS classId," +
                 " div.embedded_division_name As divName," +
-                " accType.embedded_account_type_name AS accTypeName," +
+                " accType.embedded_account_type_name AS accTypeName, accType.id AS accTypeId," +
                 " acc.embedded_account_name AS accName," +
                 " cls.embedded_class_name AS className," +
                 " brick.embedded_brick_name AS brickName, accType.cat_id AS catId" +

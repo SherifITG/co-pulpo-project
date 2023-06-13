@@ -30,18 +30,16 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.entity.masterData.Division
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.IdAndNameObj
 import com.itgates.ultra.pulpo.cira.ui.theme.*
 import com.itgates.ultra.pulpo.cira.utilities.Utilities
-import java.util.ArrayList
 import com.itgates.ultra.pulpo.cira.roomDataBase.entity.masterData.Class
-import com.itgates.ultra.pulpo.cira.ui.activities.MapActivity
 import com.itgates.ultra.pulpo.cira.ui.activities.PlanningActivity
 import com.itgates.ultra.pulpo.cira.utilities.GlobalFormats
-import com.itgates.ultra.pulpo.cira.utilities.PassedValues
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.collections.ArrayList
 
 @Composable
 fun PlanningUI(activity: PlanningActivity) {
@@ -324,6 +322,15 @@ fun PlanningScreen(
             .padding(horizontal = padding_16),
         verticalArrangement = Arrangement.spacedBy(padding_8)
     ) {
+        val searchValue = remember { mutableStateOf("") }
+        CustomOutlinedTextField(
+            myValue = searchValue,
+            myHint = "Search \uD83D\uDD0E",
+            hasError = remember { mutableStateOf(false) }
+        ) {
+            println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
+            isDataChangedToRefresh.value = !isDataChangedToRefresh.value
+        }
         Card(
             shape = ITGatesCardCornerShape,
             modifier = Modifier,
@@ -439,7 +446,18 @@ fun PlanningScreen(
                 }
 
                 list.forEach { (crm_table, list) ->
-                    if (list.isNotEmpty()) {
+                    // search filter ...
+                    val filteredList = if (searchValue.value.isNotEmpty()) {
+                        list.filter {
+                            println("88888888888888888888888888888888888888888888888888888888888888888888888888")
+                            it.accName.contains(searchValue.value) || it.doctor.embedded.name.contains(searchValue.value)
+                        }
+                    }
+                    else {
+                        list.toList()
+                    }
+
+                    if (filteredList.isNotEmpty()) {
                         val accountType = activity.currentValues.allAccountTypesList.find {
                             it.table == crm_table
                         }
@@ -463,7 +481,7 @@ fun PlanningScreen(
                                 )
                             }
                         }
-                        items(list) { item ->
+                        items(filteredList) { item ->
                             Card(
                                 shape = ITGatesCardCornerShape,
                                 modifier = Modifier

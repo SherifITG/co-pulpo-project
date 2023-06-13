@@ -63,8 +63,10 @@ class OfflineDataRepoImpl @Inject constructor(
     }
 
     override suspend fun loadActualAccountTypes(divIds: List<Long>, brickIds: List<Long>): List<AccountType> {
-        return if (brickIds.first() != -1L)
+        return if (brickIds.first() != -1L) {
+            println(" - ${accountTypeDao.loadActualAccountTypes(divIds, brickIds)}")
             accountTypeDao.loadActualAccountTypes(divIds, brickIds)
+        }
         else {
             println(" - ${accountTypeDao.loadActualAccountTypesWithoutBrick(divIds)}")
             accountTypeDao.loadActualAccountTypesWithoutBrick(divIds)
