@@ -25,7 +25,7 @@ android {
 
         buildConfigField("String", "API_LINK", "\"${project.findProperty("api_link")}\"")
         applicationVariants.all { variant ->
-            variant.resValue "string", "project_name", "Pulpo ${project.property('project_name')}"
+            variant.resValue "string", "project_name", "Pulpo Ultra ${project.property('project_name')}"
             variant.resValue "string", "BASE_URL_PHARMA", "${project.property('api_link')}"
         }
 }

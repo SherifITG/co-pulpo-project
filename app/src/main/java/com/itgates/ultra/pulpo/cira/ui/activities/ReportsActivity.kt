@@ -63,11 +63,11 @@ class ReportsActivity : ComponentActivity() {
                                         startActivity(Intent(this@ReportsActivity, PlannedVisitActivity::class.java))
                                     }
                                 }
-                                item {
-                                    ReportItemComposeView("New Plans", false, R.drawable.report_planned_visits_icon) {
-                                        startActivity(Intent(this@ReportsActivity, NewPlanReportActivity::class.java))
-                                    }
-                                }
+//                                item {
+//                                    ReportItemComposeView("New Plans", false, R.drawable.report_planned_visits_icon) {
+//                                        startActivity(Intent(this@ReportsActivity, NewPlanReportActivity::class.java))
+//                                    }
+//                                }
                             }
                         }
                     }

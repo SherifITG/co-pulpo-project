@@ -599,38 +599,37 @@ class MainActivity : BaseDataActivity() {
                                 MultiLineTextFactory(text = "Reports")
                             }
                             Spacer(modifier = Modifier.weight(spaceSize))
-//                            Box(modifier = Modifier
-//                                .weight(iconSize)
-//                                .aspectRatio(1F))
+                            Box(modifier = Modifier
+                                .weight(iconSize)
+                                .aspectRatio(1F))
 
-                            Column(
-                                modifier = Modifier
-                                    .weight(iconSize)
-                                    .clip(ITGatesCardCornerShape)
-                                    .clickable {
-                                        val intent =
-                                            Intent(this@MainActivity, PlanningActivity::class.java)
-                                        startActivity(intent)
-                                    }
-                                    .padding(padding_8),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .aspectRatio(1F),
-                                    painter = painterResource(R.drawable.main_report_icon),
-                                    contentDescription = "Icon",
-                                    tint = ITGatesPrimaryColor
-                                )
-                                MultiLineTextFactory(text = "Reports")
-                            }
+//                            Column(
+//                                modifier = Modifier
+//                                    .weight(iconSize)
+//                                    .clip(ITGatesCardCornerShape)
+//                                    .clickable {
+//                                        val intent =
+//                                            Intent(this@MainActivity, PlanningActivity::class.java)
+//                                        startActivity(intent)
+//                                    }
+//                                    .padding(padding_8),
+//                                horizontalAlignment = Alignment.CenterHorizontally
+//                            ) {
+//                                Icon(
+//                                    modifier = Modifier
+//                                        .fillMaxWidth()
+//                                        .aspectRatio(1F),
+//                                    painter = painterResource(R.drawable.main_report_icon),
+//                                    contentDescription = "Icon",
+//                                    tint = ITGatesPrimaryColor
+//                                )
+//                                MultiLineTextFactory(text = "Reports")
+//                            }
                             Spacer(modifier = Modifier.weight(spaceSize))
                         }
                     }
                 }
             }
-
         }
     }
 
