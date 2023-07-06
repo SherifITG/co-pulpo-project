@@ -11,10 +11,14 @@ import java.util.concurrent.TimeUnit
 object Globals {
 
     private val justUploadedActualIds = arrayListOf<Long>()
+    private val justUploadedNewPlanIds = arrayListOf<Long>()
 
-    private var lastTriggerTime: Date? = null
+    private var actualLastTriggerTime: Date? = null
+    private var newPlanLastTriggerTime: Date? = null
     private val actualEndEventTriggered = MutableStateFlow(false)
-    var uploadingFlow: Flow<Boolean> = actualEndEventTriggered
+    private val newPlanEndEventTriggered = MutableStateFlow(false)
+    var actualUploadingFlow: Flow<Boolean> = actualEndEventTriggered
+    var newPlanUploadingFlow: Flow<Boolean> = newPlanEndEventTriggered
 
     var trustedLocationInfo: LocationClient.LocationInfo? = null
     var actualVisitStartLocation: Location? = null
@@ -22,9 +26,18 @@ object Globals {
 
     fun triggerActualEndEvent() {
         synchronized(this) {
-            if (lastTriggerTime == null || Date().time.minus(lastTriggerTime!!.time) > 10000) {
+            if (actualLastTriggerTime == null || Date().time.minus(actualLastTriggerTime!!.time) > 10000) {
                 actualEndEventTriggered.value = !actualEndEventTriggered.value
-                lastTriggerTime = Date()
+                actualLastTriggerTime = Date()
+            }
+        }
+    }
+
+    fun triggerNewPlanEndEvent() {
+        synchronized(this) {
+            if (newPlanLastTriggerTime == null || Date().time.minus(newPlanLastTriggerTime!!.time) > 10000) {
+                newPlanEndEventTriggered.value = !newPlanEndEventTriggered.value
+                newPlanLastTriggerTime = Date()
             }
         }
     }
@@ -41,5 +54,19 @@ object Globals {
 
     fun isActualIdInJustUploadedList(id: Long): Boolean {
         return justUploadedActualIds.contains(id)
+    }
+
+    fun addNewPlanIdToJustUploadedList(ids: List<Long>) {
+        justUploadedNewPlanIds.addAll(ids)
+
+        Executors
+            .newSingleThreadScheduledExecutor()
+            .schedule({
+                justUploadedNewPlanIds.removeAll(ids.toSet())
+            }, 2, TimeUnit.SECONDS)
+    }
+
+    fun isNewPlanIdInJustUploadedList(id: Long): Boolean {
+        return justUploadedNewPlanIds.contains(id)
     }
 }

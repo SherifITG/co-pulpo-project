@@ -16,6 +16,8 @@ import com.itgates.ultra.pulpo.cira.viewModels.CacheViewModel
 import com.itgates.ultra.pulpo.cira.R
 import com.itgates.ultra.pulpo.cira.ui.activities.planningTabs.PlanningNavigation
 import com.itgates.ultra.pulpo.cira.ui.utils.PlanningCurrentValues
+import com.itgates.ultra.pulpo.cira.utilities.Globals
+import com.itgates.ultra.pulpo.cira.utilities.Utilities
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.streams.toList
@@ -94,6 +96,22 @@ class PlanningActivity : ComponentActivity() {
             currentValues.classesList = it
             isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
+
+        cacheViewModel.planningMapStatus.observe(this@PlanningActivity) {
+            if (it.size == currentValues.selectedDoctors.size) {
+                var isPassed = true
+                it.forEach { entry -> isPassed = isPassed && entry.value > 0 }
+                if (isPassed) {
+                    Globals.triggerNewPlanEndEvent()
+                    Utilities.navigateToMainActivity(applicationContext)
+                    return@observe
+                }
+            }
+
+            println("------------ $it")
+            currentValues.selectedDoctorsStatus = it
+            isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
+        }
     }
 
     private fun loadAccountAndDoctorData() {
@@ -124,7 +142,6 @@ class PlanningActivity : ComponentActivity() {
 
     fun saveNewPlans(visitDate: String) {
         val newPlanList = currentValues.selectedDoctors.stream().map {
-            val doctorAccountType = currentValues.getDoctorAccountType(it)
             currentValues.createNewPlanInstance(
                 it.divId, it.accTypeId, it.doctor.accountId,
                 it.doctor.id, 0, visitDate, 0, it.doctor.teamId

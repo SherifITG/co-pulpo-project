@@ -38,3 +38,9 @@ data class ActualVisitPharmaResponse(
     val Status_Message: String,
     val Status: Int
 )
+
+data class NewPlanPharmaResponse(
+    @SerializedName("Data") val Data: List<NewPlanDTO>,
+    val Status_Message: String,
+    val Status: Int
+)

@@ -3,23 +3,14 @@ package com.itgates.ultra.pulpo.cira.ui.activities
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.provider.Settings
-import android.view.ViewGroup
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.MutableLiveData
 import com.itgates.ultra.pulpo.cira.CoroutineManager
 import com.itgates.ultra.pulpo.cira.ui.theme.*
@@ -30,19 +21,14 @@ import com.itgates.ultra.pulpo.cira.dataStore.DataStoreService
 import com.itgates.ultra.pulpo.cira.dataStore.PreferenceKeys
 import com.itgates.ultra.pulpo.cira.network.models.responseModels.responses.LoginPharmaResponse
 import com.itgates.ultra.pulpo.cira.network.models.responseModels.responses.UserDetailsData
-import com.itgates.ultra.pulpo.cira.roomDataBase.entity.EmbeddedEntity
-import com.itgates.ultra.pulpo.cira.roomDataBase.entity.generalData.ItgFile
 import com.itgates.ultra.pulpo.cira.ui.composeUI.AppBarComposeView
 import com.itgates.ultra.pulpo.cira.ui.composeUI.LoginPage
-import com.itgates.ultra.pulpo.cira.ui.composeUI.PdfViewer
 import com.itgates.ultra.pulpo.cira.utilities.GlobalFormats
 import com.itgates.ultra.pulpo.cira.utilities.Utilities
 import com.itgates.ultra.pulpo.cira.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
 @AndroidEntryPoint
@@ -57,6 +43,20 @@ class LoginActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        println("----------------------------------------000 ${TimeZone.getDefault().displayName}")
+//        println("----------------------------------------000 ${TimeZone.getDefault().id}")
+//        println("----------------------------------------000 ${TimeZone.getDefault()}")
+//
+//        val timeZoneId = "Asia/Riyadh"
+//        val actualTime = Utilities.getActualTimeInTimeZone(timeZoneId)
+//        println("Current time in $timeZoneId: $actualTime")
+//
+//        CoroutineManager.getScope().launch {
+//            println("----------------------------------------000 ${Utilities.isDeviceClockAccurate()}")
+//        }
+
+
         setContent {
             PulpoUltraTheme {
                 Scaffold(
@@ -172,12 +172,6 @@ class LoginActivity : ComponentActivity() {
             loadingStateFlow.value = false
             dealWithLoginResponse(it)
         }
-
-        /** delete TODO */
-        serverViewModel.fileData.observeForever {
-            trial.value = true
-            cacheViewModel.saveFileData(ItgFile(5, EmbeddedEntity("file"), "link", it))
-        }
     }
 
     private fun loginAction(username: String, password: String) {
@@ -200,7 +194,7 @@ class LoginActivity : ComponentActivity() {
 
                 if (isNewUser) {
 //                    "Are you sure you want to login with different user?"
-//                    must ensur that all data deleted
+//                    must ensure that all data deleted
                 }
 
                 dealWithAuthData(dataStoreService, userData)

@@ -337,6 +337,11 @@ data class ActualVisitDTO(
     @SerializedName("giveaways") val giveaways: List<Long>
 )
 
+data class NewPlanDTO(
+    @SerializedName("planned_id") val plannedId: Long,
+    @SerializedName("offline_id") val offlineId: Long,
+)
+
 data class OfflineRecordDTO(
     @SerializedName("online_id") val onlineId: Long,
     @SerializedName("offline_id") val offlineId: Long,

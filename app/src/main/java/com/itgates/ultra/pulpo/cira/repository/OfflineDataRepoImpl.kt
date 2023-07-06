@@ -1,5 +1,7 @@
 package com.itgates.ultra.pulpo.cira.repository
 
+import android.util.Log
+import com.itgates.ultra.pulpo.cira.CoroutineManager
 import com.itgates.ultra.pulpo.cira.network.models.responseModels.responses.ActualVisitDTO
 import com.itgates.ultra.pulpo.cira.network.models.responseModels.responses.OfflineRecordDTO
 import com.itgates.ultra.pulpo.cira.network.models.responseModels.responses.*
@@ -11,9 +13,12 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.entity.masterData.*
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.enums.IdAndNameTablesNamesEnum
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.enums.SettingEnum
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.relationalData.*
+import com.itgates.ultra.pulpo.cira.utilities.FaultedHashMap
 import com.itgates.ultra.pulpo.cira.utilities.GlobalFormats
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 import kotlin.streams.toList
 
 
@@ -32,20 +37,11 @@ class OfflineDataRepoImpl @Inject constructor(
     private val plannedVisitDao: PlannedVisitDao,
     private val actualVisitDao: ActualVisitDao,
 
-    private val itgFileDao: ItgFileDao,
-
     private val offlineLogDao: OfflineLogDao,
     private val offlineLocDao: OfflineLocDao,
 
     private val newPlanDao: NewPlanDao,
 ): OfflineDataRepo {
-    override suspend fun saveFileData(itgFile: ItgFile) {
-        itgFileDao.insert(itgFile)
-    }
-
-    override suspend fun loadFileData(): ItgFile {
-        return itgFileDao.loadItem()
-    }
 
     override suspend fun loadActualSettings(): List<Setting> {
         return settingDao.loadAll(
@@ -143,6 +139,10 @@ class OfflineDataRepoImpl @Inject constructor(
         return actualVisitDao.loadUnSyncedRecords(false)
     }
 
+    override suspend fun loadUnSyncedActualNewPlansData(): List<NewPlanEntity> {
+        return newPlanDao.loadUnSyncedRecords(false)
+    }
+
     override suspend fun loadRelationalPlannedVisitsData(): List<RelationalPlannedVisit> {
         return plannedVisitDao.loadRelationalPlannedVisits()
     }
@@ -194,6 +194,13 @@ class OfflineDataRepoImpl @Inject constructor(
         return actualVisitDao.updateSyncedActualVisits(
             actualVisitDTO.visitId, actualVisitDTO.syncDate, actualVisitDTO.syncTime,
             (actualVisitDTO.isSynced == 1), actualVisitDTO.offlineId
+        )
+    }
+
+    override suspend fun uploadedNewPlanData(newPlanDTO: NewPlanDTO) {
+        return newPlanDao.updateSyncedNewPlans(
+            newPlanDTO.plannedId, "newPlanDTO.syncDate", "newPlanDTO.syncTime",
+            "(newPlanDTO.isSynced == 1)".isNotEmpty(), newPlanDTO.offlineId
         )
     }
 
@@ -263,8 +270,31 @@ class OfflineDataRepoImpl @Inject constructor(
         offlineLocDao.insert(offlineLoc)
     }
 
-    override suspend fun saveNewPlans(newPlanList: List<NewPlanEntity>) {
+    override suspend fun saveAllNewPlans(newPlanList: List<NewPlanEntity>) {
         newPlanDao.insertAll(newPlanList)
+    }
+
+    override suspend fun saveNewPlans(newPlanList: List<NewPlanEntity>): HashMap<Int, Long> {
+        val planingMap = HashMap<Int, Long>()
+        newPlanList.forEachIndexed { index, planningObj ->
+            try {
+                val job = CoroutineManager.getScope().launch {
+                    planingMap[index] = newPlanDao.insertNewPlanWithValidation(
+                        planningObj.onlineId, planningObj.divisionId, planningObj.accountTypeId.toInt(),
+                        planningObj.itemId, planningObj.itemDoctorId, planningObj.members,
+                        planningObj.visitDate, planningObj.visitTime, planningObj.shift,
+                        planningObj.insertionDate, planningObj.userId, planningObj.teamId,
+                        planningObj.isApproved, planningObj.relatedId, planningObj.isSynced,
+                        planningObj.syncDate, planningObj.syncTime
+                    )
+                }
+                job.join()
+            } catch (e: Exception) {
+                planingMap[index] = -2
+                Log.d("OfflineDataRepoImpl", "saveNewPlans: failed $e")
+            }
+        }
+        return planingMap
     }
 
     override suspend fun uploadedOfflineLogData(offlineLogDTO: OfflineRecordDTO) {

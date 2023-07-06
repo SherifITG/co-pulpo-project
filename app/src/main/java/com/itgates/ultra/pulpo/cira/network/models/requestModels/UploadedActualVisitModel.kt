@@ -41,7 +41,7 @@ data class UploadedActualVisitModel(
     var giveaway_info: List<GiveawayInfoModel>
 ) {
     constructor(actualVisit: ActualVisit): this (
-        actualVisit.onlineId,actualVisit.id, actualVisit.divisionId, actualVisit.accountTypeId,
+        actualVisit.onlineId, actualVisit.id, actualVisit.divisionId, actualVisit.accountTypeId,
         actualVisit.itemId, actualVisit.itemDoctorId, actualVisit.noOfDoctors,
         if (actualVisit.multiplicity == MultiplicityEnum.DOUBLE_VISIT) "1" else "0",
         actualVisit.startDate, actualVisit.startTime,

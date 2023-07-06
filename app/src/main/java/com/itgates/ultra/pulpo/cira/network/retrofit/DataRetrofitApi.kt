@@ -1,6 +1,7 @@
 package com.itgates.ultra.pulpo.cira.network.retrofit
 
 import com.itgates.ultra.pulpo.cira.network.models.requestModels.UploadedActualVisitModel
+import com.itgates.ultra.pulpo.cira.network.models.requestModels.UploadedNewPlanModel
 import com.itgates.ultra.pulpo.cira.network.models.responseModels.responses.*
 import kotlinx.coroutines.Deferred
 import retrofit2.http.*
@@ -16,7 +17,6 @@ interface DataRetrofitApi {
     ): Deferred<LoginPharmaResponse>
 
     @GET("index.php")
-
     fun masterDataAsync(
         @HeaderMap headers: Map<String, String>,
         @Query("FN") FN: String,
@@ -54,5 +54,11 @@ interface DataRetrofitApi {
         @HeaderMap headers: Map<String, String>,
         @Body List: List<UploadedActualVisitModel>
     ): Deferred<ActualVisitPharmaResponse>
+
+    @POST("_planned.php")
+    fun uploadNewPlanAsync(
+        @HeaderMap headers: Map<String, String>,
+        @Body List: List<UploadedNewPlanModel>
+    ): Deferred<NewPlanPharmaResponse>
 
 }

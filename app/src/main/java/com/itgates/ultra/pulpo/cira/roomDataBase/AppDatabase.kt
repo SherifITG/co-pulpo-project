@@ -14,10 +14,10 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.entity.masterData.*
     entities = [
         IdAndNameEntity::class, AccountType::class, Brick::class, Class::class, Division::class,
         Setting::class, Account::class, Doctor::class, ActualVisit::class, PlannedVisit::class,
-        ItgFile::class, OfflineLog::class, OfflineLoc::class, Presentation::class, Slide::class,
+        OfflineLog::class, OfflineLoc::class, Presentation::class, Slide::class,
         NewPlanEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -37,8 +37,6 @@ abstract class AppDatabase: RoomDatabase() {
 
     abstract fun plannedVisitDao(): PlannedVisitDao
     abstract fun actualVisitDao(): ActualVisitDao
-
-    abstract fun itgFileDao(): ItgFileDao
 
     abstract fun offlineLogDao(): OfflineLogDao
     abstract fun offlineLocDao(): OfflineLocDao

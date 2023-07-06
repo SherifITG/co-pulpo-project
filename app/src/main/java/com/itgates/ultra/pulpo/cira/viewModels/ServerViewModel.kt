@@ -11,6 +11,7 @@ import com.itgates.ultra.pulpo.cira.dataStore.DataStoreService
 import com.itgates.ultra.pulpo.cira.dataStore.PreferenceKeys
 import com.itgates.ultra.pulpo.cira.enumerations.CachingDataTackStatus
 import com.itgates.ultra.pulpo.cira.network.models.requestModels.UploadedActualVisitModel
+import com.itgates.ultra.pulpo.cira.network.models.requestModels.UploadedNewPlanModel
 import com.itgates.ultra.pulpo.cira.network.models.responseModels.responses.*
 import com.itgates.ultra.pulpo.cira.repository.OnlineDataRepoImpl
 import com.itgates.ultra.pulpo.cira.ui.utils.BaseDataActivity
@@ -42,12 +43,8 @@ class ServerViewModel @Inject constructor(
     val plannedVisitData: LiveData<PlannedVisitsPharmaResponse> get() = _plannedVisitData
     private val _uploadedActualVisitData = MutableLiveData<ActualVisitPharmaResponse>()
     val uploadedActualVisitData: LiveData<ActualVisitPharmaResponse> get() = _uploadedActualVisitData
-
-
-
-
-    private val _fileData = MutableLiveData<File>()
-    val fileData: LiveData<File> get() = _fileData
+    private val _uploadedNewPlanData = MutableLiveData<NewPlanPharmaResponse>()
+    val uploadedNewPlanData: LiveData<NewPlanPharmaResponse> get() = _uploadedNewPlanData
 
     private suspend fun getFile(context: Context, fileName: String, fileStructure: String, slideId: Long) {
         val job = CoroutineManager.getScope().launch {
@@ -248,6 +245,7 @@ class ServerViewModel @Inject constructor(
                     getHeaders(),
                     uploadedList
                 )
+                println("server repo -> uploadActualVisitsData -> ${_uploadedActualVisitData.value}")
             } catch (e: Exception) {
                 _uploadedActualVisitData.value = ActualVisitPharmaResponse(
                     Data = ArrayList(),
@@ -255,6 +253,25 @@ class ServerViewModel @Inject constructor(
                     Status_Message = "your internet is poor"
                 )
                 Log.d("ServerViewModel", "uploadActualVisitsData: failed $e")
+            }
+        }
+    }
+
+    fun uploadNewPlansData(uploadedList: List<UploadedNewPlanModel>) {
+        CoroutineManager.getScope().launch {
+            try {
+                _uploadedNewPlanData.value = onlineDataRepo.uploadNewPlansData(
+                    getHeaders(),
+                    uploadedList
+                )
+                println("server repo -> uploadNewPlansData -> ${_uploadedNewPlanData.value}")
+            } catch (e: Exception) {
+                _uploadedNewPlanData.value = NewPlanPharmaResponse(
+                    Data = ArrayList(),
+                    Status = 404,
+                    Status_Message = "your internet is poor"
+                )
+                Log.d("ServerViewModel", "uploadNewPlansData: failed $e")
             }
         }
     }

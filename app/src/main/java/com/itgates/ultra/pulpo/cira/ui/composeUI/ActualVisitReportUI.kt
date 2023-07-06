@@ -78,7 +78,9 @@ fun ActualVisitScreen(
     }
 
     Column(
-        modifier = Modifier.padding(top = padding_4).padding(horizontal = padding_16),
+        modifier = Modifier
+            .padding(top = padding_4)
+            .padding(horizontal = padding_16),
         verticalArrangement = Arrangement.spacedBy(padding_8)
     ) {
         Card(
@@ -220,6 +222,8 @@ fun ActualVisitScreen(
                                             visitTime
                                         }
                                     }
+//                                println("is synced ${item.actualVisit.isSynced} ------------------------------")
+//                                println("is id ${item.actualVisit.id} ------------------------------")
                                 if (item.actualVisit.isSynced) {
                                     TextFactory(
                                         text = "online id: (${item.actualVisit.onlineId}) ✅",

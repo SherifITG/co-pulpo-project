@@ -33,7 +33,7 @@ object RepoModule {
             roomDataBase.divisionDao(), roomDataBase.settingDao(), roomDataBase.idAndNameDao(),
             roomDataBase.accountDao(), roomDataBase.doctorDao(),roomDataBase.presentationDao(),
             roomDataBase.slideDao(), roomDataBase.plannedVisitDao(), roomDataBase.actualVisitDao(),
-            roomDataBase.itgFileDao(), roomDataBase.offlineLogDao(), roomDataBase.offlineLocDao(),
+            roomDataBase.offlineLogDao(), roomDataBase.offlineLocDao(),
             roomDataBase.newPlanDao()
 
         )

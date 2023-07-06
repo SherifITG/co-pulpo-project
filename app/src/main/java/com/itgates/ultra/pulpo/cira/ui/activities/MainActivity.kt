@@ -37,6 +37,7 @@ import com.itgates.ultra.pulpo.cira.utilities.Utilities
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.itgates.ultra.pulpo.cira.enumerations.CachingDataTackStatus
+import com.itgates.ultra.pulpo.cira.network.models.requestModels.UploadedNewPlanModel
 import com.itgates.ultra.pulpo.cira.ui.utils.BaseDataActivity
 import com.itgates.ultra.pulpo.cira.utilities.GlobalFormats
 import com.itgates.ultra.pulpo.cira.utilities.PassedValues.mainActivity_isNewUser
@@ -243,17 +244,7 @@ class MainActivity : BaseDataActivity() {
 
     private fun setObservers() {
         cacheViewModel.unSyncedActualVisitData.observeForever { actualList ->
-            CoroutineManager.getScope().launch {
-                cacheViewModel.getDataStoreService().setDataObj(
-                    stringPreferencesKey("custom_logs"),
-                    cacheViewModel.getDataStoreService()
-                        .getDataObjAsync(stringPreferencesKey("custom_logs")).await()
-                            + "\nun filtered " + Gson().toJson(actualList)
-                            + "\n" + GlobalFormats.getFullDate(Locale.getDefault(), Date())
-
-                )
-            }
-            println("+++++++++++++++++++++++++++++ ${Date().time} $actualList")
+            println("+++++++++++++++++++++++++++++ actual +++ ${Date().time} $actualList")
             // filter blocked ids
             val filteredList = actualList.stream().filter {
                 !Globals.isActualIdInJustUploadedList(it.id)
@@ -266,18 +257,7 @@ class MainActivity : BaseDataActivity() {
             Globals.addActualIdToJustUploadedList(filteredIdsList)
 
             // upload the remained actual list
-
             if (filteredList.isNotEmpty()) {
-//                CoroutineManager.getScope().launch {
-//                    cacheViewModel.getDataStoreService().setDataObj(
-//                        stringPreferencesKey("custom_logs"),
-//                        cacheViewModel.getDataStoreService()
-//                            .getDataObjAsync(stringPreferencesKey("custom_logs")).await()
-//                                + "\nfiltered " + Gson().toJson(filteredList)
-//                                + "\n" + GlobalFormats.getFullDate(Locale.getDefault(), Date())
-//
-//                    )
-//                }
                 println("***************************** ${Date().time} $filteredList")
                 serverViewModel.uploadActualVisitsData(
                     filteredList.stream().map { UploadedActualVisitModel(it) }.toList()
@@ -286,19 +266,39 @@ class MainActivity : BaseDataActivity() {
         }
 
         serverViewModel.uploadedActualVisitData.observeForever { response ->
-            CoroutineManager.getScope().launch {
-                cacheViewModel.getDataStoreService().setDataObj(
-                    stringPreferencesKey("custom_logs"),
-                    cacheViewModel.getDataStoreService()
-                        .getDataObjAsync(stringPreferencesKey("custom_logs")).await()
-                            + "\nresponse " + Gson().toJson(response)
-                            + "\n" + GlobalFormats.getFullDate(Locale.getDefault(), Date())
-
-                )
-            }
             if (response.Data.isNotEmpty()) {
                 response.Data.forEach {
                     cacheViewModel.uploadedActualVisitData(it)
+                }
+            }
+        }
+
+        cacheViewModel.unSyncedNewPlanData.observeForever { newPlanList ->
+            println("+++++++++++++++++++++++++++++ new plan +++ ${Date().time} $newPlanList")
+            // filter blocked ids
+            val filteredList = newPlanList.stream().filter {
+                !Globals.isNewPlanIdInJustUploadedList(it.id)
+            }.toList()
+
+            // calculate blocked ids
+            val filteredIdsList = filteredList.stream().map { it.id }.toList()
+
+            // blocking for 2 second
+            Globals.addNewPlanIdToJustUploadedList(filteredIdsList)
+
+            // upload the remained actual list
+            if (filteredList.isNotEmpty()) {
+                println("***************************** new plan *** ${Date().time} $filteredList")
+                serverViewModel.uploadNewPlansData(
+                    filteredList.stream().map { UploadedNewPlanModel(it) }.toList()
+                )
+            }
+        }
+
+        serverViewModel.uploadedNewPlanData.observeForever { response ->
+            if (response.Data.isNotEmpty()) {
+                response.Data.forEach {
+                    cacheViewModel.uploadedNewPlanData(it)
                 }
             }
         }
@@ -309,13 +309,18 @@ class MainActivity : BaseDataActivity() {
         connectivityObserver.observe().onEach {
             if (it == ConnectivityObserver.ConnectivityStatus.AVAILABLE) {
                 Globals.triggerActualEndEvent()
+                Globals.triggerNewPlanEndEvent()
             }
         }.launchIn(lifecycleScope)
     }
 
     private fun observeOnUploadEvent() {
-        Globals.uploadingFlow.onEach {
+        Globals.actualUploadingFlow.onEach {
             cacheViewModel.loadUnSyncedActualVisits()
+        }.launchIn(lifecycleScope)
+
+        Globals.newPlanUploadingFlow.onEach {
+            cacheViewModel.loadUnSyncedNewPlans()
         }.launchIn(lifecycleScope)
     }
 
@@ -599,32 +604,32 @@ class MainActivity : BaseDataActivity() {
                                 MultiLineTextFactory(text = "Reports")
                             }
                             Spacer(modifier = Modifier.weight(spaceSize))
-                            Box(modifier = Modifier
-                                .weight(iconSize)
-                                .aspectRatio(1F))
+//                            Box(modifier = Modifier
+//                                .weight(iconSize)
+//                                .aspectRatio(1F))
 
-//                            Column(
-//                                modifier = Modifier
-//                                    .weight(iconSize)
-//                                    .clip(ITGatesCardCornerShape)
-//                                    .clickable {
-//                                        val intent =
-//                                            Intent(this@MainActivity, PlanningActivity::class.java)
-//                                        startActivity(intent)
-//                                    }
-//                                    .padding(padding_8),
-//                                horizontalAlignment = Alignment.CenterHorizontally
-//                            ) {
-//                                Icon(
-//                                    modifier = Modifier
-//                                        .fillMaxWidth()
-//                                        .aspectRatio(1F),
-//                                    painter = painterResource(R.drawable.main_report_icon),
-//                                    contentDescription = "Icon",
-//                                    tint = ITGatesPrimaryColor
-//                                )
-//                                MultiLineTextFactory(text = "Reports")
-//                            }
+                            Column(
+                                modifier = Modifier
+                                    .weight(iconSize)
+                                    .clip(ITGatesCardCornerShape)
+                                    .clickable {
+                                        val intent =
+                                            Intent(this@MainActivity, PlanningActivity::class.java)
+                                        startActivity(intent)
+                                    }
+                                    .padding(padding_8),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .aspectRatio(1F),
+                                    painter = painterResource(R.drawable.main_report_icon),
+                                    contentDescription = "Icon",
+                                    tint = ITGatesPrimaryColor
+                                )
+                                MultiLineTextFactory(text = "Planning")
+                            }
                             Spacer(modifier = Modifier.weight(spaceSize))
                         }
                     }

@@ -13,7 +13,6 @@ import android.location.Location
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.widget.TextView
 import android.widget.Toast
@@ -21,12 +20,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.itgates.ultra.pulpo.cira.ui.activities.MainActivity
 import com.google.android.gms.location.*
+import com.instacart.library.truetime.TrueTime
 import java.util.*
 import com.itgates.ultra.pulpo.cira.R
 import com.itgates.ultra.pulpo.cira.roomDataBase.entity.generalData.OfflineLog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.time.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -136,8 +139,28 @@ object Utilities {
     }
 
     fun isAutomaticTimeEnabled(context: Context): Boolean {
-        return (Settings.Global.getInt(context.contentResolver, Settings.Global.AUTO_TIME_ZONE) == 1)
+        //        return (Settings.Global.getInt(context.contentResolver, Settings.Global.AUTO_TIME_ZONE) == 1)
+        //        return TimeZone.getDefault().id == "Asia/Riyadh"
+        return listOf("Africa/Cairo", "Asia/Riyadh").contains(TimeZone.getDefault().id)
     }
+
+    suspend fun isDeviceClockAccurate(): Boolean = withContext(Dispatchers.IO){
+        if (!TrueTime.isInitialized())
+            TrueTime.build().initialize()
+        println("---------- %%%%% ${TrueTime.isInitialized()}")
+        println("---------- %%%%% ${TrueTime.now()}")
+        println("---------- %%%%% ${Date()}")
+        true
+    }
+
+    fun getActualTimeInTimeZone(timeZoneId: String): LocalDateTime {
+        val zoneId = ZoneId.of(timeZoneId)
+        val zonedDateTime = ZonedDateTime.now(zoneId)
+
+        return zonedDateTime.toLocalDateTime()
+    }
+
+
 
     private const val LOCATION_PERMISSION_REQUEST_CODE = 101
     fun Context.checkLocationPermission(activity: Activity): Boolean {

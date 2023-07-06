@@ -1,6 +1,8 @@
 package com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.queries
 
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.TablesNames
+import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.TablesNames.NewPlanTable
+import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.TablesNames.PlannedVisitTable
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.tablesEnums.*
 
 object MainRoomQuery {
@@ -71,14 +73,14 @@ object MainRoomQuery {
                 " online_id, division_id, account_type_id, item_id, item_doctor_id, no_of_doctors," +
                 " planned_visit_id, multiplicity, start_date, start_time, end_date, end_time, shift," +
                 " comments, insertion_date, insertion_time, user_id, team_id, ll_start, lg_start," +
-                " ll_end, lg_end, visit_duration, visit_deviation, is_synced, planned_visit_id," +
+                " ll_end, lg_end, visit_duration, visit_deviation, is_synced," +
                 " sync_date, sync_time, added_date, multiple_lists_info" +
                 " ) SELECT " +
                 " :onlineId, :divisionId, :accountTypeId, :itemId, :itemDoctorId, :noOfDoctors," +
                 " :plannedVisitId, :multiplicity, :startDate, :startTime, :endDate, :endTime," +
                 " :shift, :comments, :insertionDate, :insertionTime, :userId, :teamId, :llStart," +
                 " :lgStart, :llEnd, :lgEnd, :visitDuration, :visitDeviation, :isSynced," +
-                " :plannedVisitId, :syncDate, :syncTime, :addedDate, :multipleListsInfo"
+                " :syncDate, :syncTime, :addedDate, :multipleListsInfo"
 
     const val insertActualVisitWithValidationQuery =
         "$insertActualVisitWithValidationFirstPartQuery WHERE NOT EXISTS ( $actualVisitValidationQuery )"
@@ -86,6 +88,39 @@ object MainRoomQuery {
     const val insertOfficeWorkWithValidationQuery =
         "$insertActualVisitWithValidationFirstPartQuery WHERE NOT EXISTS ( $officeWorkValidationQuery )"
 
+
+
+    const val unSyncedNewPlanQuery = "SELECT * FROM ${TablesNames.NewPlanTable}" +
+            " WHERE is_synced = :isSynced"
+
+    const val updateSyncedNewPlanQuery = "UPDATE ${TablesNames.NewPlanTable}" +
+            " SET online_id = :onlineId, sync_date = :syncDate, sync_time = :syncTime, is_synced = :isSynced" +
+            " WHERE id = :offlineId"
+
+    // ---------------------------------------------------------------------------------------------
+    private const val newPlanValidationQuery = "SELECT 1 FROM $NewPlanTable" +
+            " WHERE $NewPlanTable.user_id = :userId AND $NewPlanTable.visit_date = :visitDate" +
+            " AND $NewPlanTable.item_id = :itemId AND $NewPlanTable.item_doctor_id = :itemDoctorId" +
+            " AND $NewPlanTable.acc_type_id = :accTypeId"
+
+    private const val plannedVisitValidationQuery = "SELECT 1 FROM $PlannedVisitTable" +
+            " WHERE $PlannedVisitTable.user_id = :userId AND $PlannedVisitTable.visit_date = :visitDate" +
+            " AND $PlannedVisitTable.item_id = :itemId AND $PlannedVisitTable.item_doctor_id = :itemDoctorId" +
+            " AND $PlannedVisitTable.acc_type_id = :accTypeId"
+
+    private const val insertNewPlanWithValidationFirstPartQuery =
+        "INSERT INTO $NewPlanTable (" +
+                " online_id, div_id, acc_type_id, item_id, item_doctor_id, members, visit_date," +
+                " visit_time, shift, insertion_date, user_id, team_id, is_approved, related_id," +
+                " is_synced, sync_date, sync_time" +
+                " ) SELECT " +
+                " :onlineId, :divId, :accTypeId, :itemId, :itemDoctorId, :members, :visitDate," +
+                " :visitTime, :shift, :insertionDate, :userId, :teamId, :isApproved, :relatedId," +
+                " :isSynced, :syncDate, :syncTime"
+
+    const val insertNewPlanWithValidationQuery =
+        "$insertNewPlanWithValidationFirstPartQuery WHERE NOT EXISTS ( $newPlanValidationQuery )" +
+                " AND NOT EXISTS ( $plannedVisitValidationQuery )"
 
 
 

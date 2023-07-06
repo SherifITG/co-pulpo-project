@@ -59,6 +59,7 @@ class PlanningCurrentValues(private val activity: PlanningActivity) {
     var classesList: List<Class> = listOf()
 
     val selectedDoctors = ArrayList<DoctorPlanningData>()
+    var selectedDoctorsStatus = HashMap<Int, Long>()
 
     // current values
     var divisionCurrentValue: IdAndNameObj = divisionStartValue
@@ -107,15 +108,6 @@ class PlanningCurrentValues(private val activity: PlanningActivity) {
                 }
             }
         }
-    }
-
-    fun getDoctorAccountType(doctorData: DoctorPlanningData): AccountType? {
-        var accountType: AccountType? = null
-        allAccountTypesList.forEach {
-            if (it.table == doctorData.doctor.table) accountType = it
-        }
-
-        return accountType
     }
 
     fun createNewPlanInstance(

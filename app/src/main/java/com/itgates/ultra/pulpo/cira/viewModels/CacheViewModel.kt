@@ -17,6 +17,7 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.entity.masterData.*
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.relationalData.*
 import com.itgates.ultra.pulpo.cira.ui.utils.BaseDataActivity
 import com.itgates.ultra.pulpo.cira.utilities.FaultedArrayList
+import com.itgates.ultra.pulpo.cira.utilities.FaultedHashMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,6 +51,8 @@ class CacheViewModel @Inject constructor(
     val slideData: LiveData<List<Slide>> get() = _slideData
     private val _unSyncedActualVisitData = MutableLiveData<List<ActualVisit>>()
     val unSyncedActualVisitData: LiveData<List<ActualVisit>> get() = _unSyncedActualVisitData
+    private val _unSyncedNewPlanData = MutableLiveData<List<NewPlanEntity>>()
+    val unSyncedNewPlanData: LiveData<List<NewPlanEntity>> get() = _unSyncedNewPlanData
     private val _relationalPlannedVisitData = MutableLiveData<List<RelationalPlannedVisit>>()
     val relationalPlannedVisitData: LiveData<List<RelationalPlannedVisit>> get() = _relationalPlannedVisitData
     private val _relationalNewPlanData = MutableLiveData<List<RelationalNewPlan>>()
@@ -67,9 +70,6 @@ class CacheViewModel @Inject constructor(
     private val _doctorPlanningData = MutableLiveData<List<DoctorPlanningData>>()
     val doctorPlanningData: LiveData<List<DoctorPlanningData>> get() = _doctorPlanningData
 
-    private val _fileData = MutableLiveData<ItgFile>()
-    val fileData: LiveData<ItgFile> get() = _fileData
-
     private val _offlineLogData = MutableLiveData<List<OfflineLog>>()
     val offlineLogData: LiveData<List<OfflineLog>> get() = _offlineLogData
     private val _offlineLocData = MutableLiveData<List<OfflineLoc>>()
@@ -78,31 +78,13 @@ class CacheViewModel @Inject constructor(
     private val _actualVisitStatus = MutableLiveData<Long>()
     val actualVisitStatus: LiveData<Long> get() = _actualVisitStatus
 
+    private val _planningMapStatus = MutableLiveData<HashMap<Int, Long>>()
+    val planningMapStatus: LiveData<HashMap<Int, Long>> get() = _planningMapStatus
+
     private val _plannedVisitMarkedDone = MutableLiveData<Boolean>()
     val plannedVisitMarkedDone: LiveData<Boolean> get() = _plannedVisitMarkedDone
 
     fun getDataStoreService(): DataStoreService = this.dataStoreService
-
-    fun saveFileData(itgFile: ItgFile) {
-        CoroutineManager.getScope().launch {
-            try {
-                offlineDataRepo.saveFileData(itgFile)
-                println("saveFileData ---------------------------------")
-            } catch (e: Exception) {
-                Log.d("CacheViewModel", "saveFileData: failed $e")
-            }
-        }
-    }
-
-    fun loadFileData() {
-        CoroutineManager.getScope().launch {
-            try {
-                _fileData.value = offlineDataRepo.loadFileData()
-            } catch (e: Exception) {
-                Log.d("CacheViewModel", "loadFileData: failed $e")
-            }
-        }
-    }
 
     fun loadActualSettings() {
         CoroutineManager.getScope().launch {
@@ -188,7 +170,7 @@ class CacheViewModel @Inject constructor(
             try {
                 _slideData.value = offlineDataRepo.loadSlidesByPresentationId(presentationId)
             } catch (e: Exception) {
-                _idAndNameEntityData.value = FaultedArrayList()
+                _slideData.value = FaultedArrayList()
                 Log.d("CacheViewModel", "loadByPresentationId: failed $e")
             }
         }
@@ -243,7 +225,7 @@ class CacheViewModel @Inject constructor(
             try {
                 _presentationData.value = offlineDataRepo.loadPresentations()
             } catch (e: Exception) {
-                _doctorData.value = FaultedArrayList()
+                _presentationData.value = FaultedArrayList()
                 Log.d("CacheViewModel", "loadPresentations: failed $e")
             }
         }
@@ -256,6 +238,17 @@ class CacheViewModel @Inject constructor(
             } catch (e: Exception) {
                 _unSyncedActualVisitData.value = FaultedArrayList()
                 Log.d("CacheViewModel", "loadUnSyncedActualVisits: failed $e")
+            }
+        }
+    }
+
+    fun loadUnSyncedNewPlans() {
+        CoroutineManager.getScope().launch {
+            try {
+                _unSyncedNewPlanData.value = offlineDataRepo.loadUnSyncedActualNewPlansData()
+            } catch (e: Exception) {
+                _unSyncedNewPlanData.value = FaultedArrayList()
+                Log.d("CacheViewModel", "loadUnSyncedActualNewPlans: failed $e")
             }
         }
     }
@@ -380,7 +373,6 @@ class CacheViewModel @Inject constructor(
     }
 
     fun uploadedActualVisitData(actualVisitDTO: ActualVisitDTO) {
-        println(actualVisitDTO)
         CoroutineManager.getScope().launch {
             try {
                 offlineDataRepo.uploadedActualVisitData(actualVisitDTO)
@@ -391,12 +383,23 @@ class CacheViewModel @Inject constructor(
         }
     }
 
+    fun uploadedNewPlanData(newPlanDTO: NewPlanDTO) {
+        CoroutineManager.getScope().launch {
+            try {
+                offlineDataRepo.uploadedNewPlanData(newPlanDTO)
+                Log.d("CacheViewModel", "uploadedNewPlanData: success $newPlanDTO")
+            } catch (e: Exception) {
+                Log.d("CacheViewModel", "uploadedNewPlanData: failed $e")
+            }
+        }
+    }
+
     fun insertActualVisitWithValidation(actualVisit: ActualVisit) {
         CoroutineManager.getScope().launch {
             try {
                 _actualVisitStatus.value = offlineDataRepo.insertActualVisitWithValidation(actualVisit)
             } catch (e: Exception) {
-                _doctorData.value = FaultedArrayList()
+                _actualVisitStatus.value = -2
                 Log.d("CacheViewModel", "insertActualVisitWithValidation: failed $e")
             }
         }
@@ -509,8 +512,9 @@ class CacheViewModel @Inject constructor(
     fun saveNewPlans(newPlanList: List<NewPlanEntity>) {
         CoroutineManager.getScope().launch {
             try {
-                offlineDataRepo.saveNewPlans(newPlanList)
+                _planningMapStatus.value = offlineDataRepo.saveNewPlans(newPlanList)
             } catch (e: Exception) {
+                _planningMapStatus.value = FaultedHashMap()
                 Log.d("CacheViewModel", "saveNewPlans: failed $e")
             }
         }

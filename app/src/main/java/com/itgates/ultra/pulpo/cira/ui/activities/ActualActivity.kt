@@ -308,6 +308,9 @@ class ActualActivity : ComponentActivity() {
                     Utilities.navigateToMainActivity(applicationContext)
                 }
             }
+            else if (it > -2) {
+                Utilities.createCustomToast(applicationContext, "error when saving this actual visit")
+            }
             else {
                 Utilities.createCustomToast(applicationContext, "this actual visit is done before")
             }

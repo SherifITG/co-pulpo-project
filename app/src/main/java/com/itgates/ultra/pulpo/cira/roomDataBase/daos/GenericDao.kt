@@ -223,12 +223,6 @@ interface ActualVisitDao : GenericDao<ActualVisit> {
 }
 
 @Dao
-interface ItgFileDao : GenericDao<ItgFile> {
-    @Query("SELECT * FROM ${TablesNames.FileTable} WHERE id = 5")
-    suspend fun loadItem(): ItgFile
-}
-
-@Dao
 interface OfflineLogDao : GenericDao<OfflineLog> {
     @Query(MainRoomQuery.updateSyncedOfflineLogQuery)
     suspend fun updateSyncedOfflineLogs(
@@ -261,11 +255,24 @@ interface OfflineLocDao : GenericDao<OfflineLoc> {
 @Dao
 interface NewPlanDao : GenericDao<NewPlanEntity> {
 
+    @Query(MainRoomQuery.insertNewPlanWithValidationQuery)
+    suspend fun insertNewPlanWithValidation(
+        onlineId: Long, divId: Long, accTypeId: Int, itemId: Long, itemDoctorId: Long, members: Long,
+        visitDate: String, visitTime: String, shift: Int, insertionDate: String, userId: Long,
+        teamId: Long, isApproved: Boolean, relatedId: Long, isSynced: Boolean, syncDate: String,
+        syncTime: String,
+    ): Long
+
+    @Query(MainRoomQuery.updateSyncedNewPlanQuery)
+    suspend fun updateSyncedNewPlans(
+        onlineId: Long, syncDate: String, syncTime: String, isSynced: Boolean, offlineId: Long
+    )
+
+    @Query(MainRoomQuery.unSyncedNewPlanQuery)
+    suspend fun loadUnSyncedRecords(isSynced: Boolean): List<NewPlanEntity>
+
     @Query(RelationalRoomQuery.newPlanListQuery)
     suspend fun loadRelationalNewPlans(): List<RelationalNewPlan>
-
-//    @Query(RelationalRoomQuery.plannedOfficeWorksListQuery)
-//    suspend fun loadRelationalPlannedOfficeWorks(tableId: IdAndNameTablesNamesEnum): List<RelationalPlannedOfficeWork>
 
     @Query("UPDATE ${TablesNames.NewPlanTable} SET is_approved = :isApproved WHERE id = :doneId")
     suspend fun markAsApproved(isApproved: Boolean, doneId: Long)

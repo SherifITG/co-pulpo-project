@@ -18,7 +18,7 @@ fun PlanningNavGraph(
             PlanningInnerNavigation(activity = activity)
         }
         composable(route = PlanningBarScreen.SaveTap.route) {
-            PlanningSaveScreen(activity = activity)
+            PlanningSaveScreenUI(activity = activity)
         }
     }
 }

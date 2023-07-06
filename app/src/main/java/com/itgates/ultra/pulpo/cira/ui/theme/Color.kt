@@ -11,6 +11,7 @@ val ITGatesWhiteColor = Color(0xFFFFFFFF)
 val ITGatesOrangeColor = Color(0xFFEC7E2B)
 val ITGatesLightOrangeColor = Color(0xA6EC7E2B)
 val ITGatesGreyColor = Color(0x749B9B9B)
+val ITGatesGreenColor = Color(0xFF089E0A)
 val ITGatesIconGreyColor = Color(0xCC404040)
 val ITGatesIconGreenColor = Color(0xFF00FF22)
 val ITGatesTransparentColor = Color.Transparent

@@ -1,6 +1,7 @@
 package com.itgates.ultra.pulpo.cira.repository
 
 import com.itgates.ultra.pulpo.cira.network.models.requestModels.UploadedActualVisitModel
+import com.itgates.ultra.pulpo.cira.network.models.requestModels.UploadedNewPlanModel
 import com.itgates.ultra.pulpo.cira.network.models.responseModels.responses.*
 import com.itgates.ultra.pulpo.cira.network.retrofit.DataRetrofitApi
 import com.itgates.ultra.pulpo.cira.network.retrofit.FilesDataRetrofitApi
@@ -70,6 +71,19 @@ class OnlineDataRepoImpl @Inject constructor(
     ): ActualVisitPharmaResponse {
         println("Uploaded List : $list")
         return dataRetrofitApi.uploadActualVisitAsync(headers, list).await()
+//        return try{
+//            dataRetrofitApi.uploadActualVisitAsync(headers, list).await()
+//        }catch (ex:Exception){
+//            ActualVisitPharmaResponse(listOf(), "", "")
+//        }
+    }
+
+    override suspend fun uploadNewPlansData(
+        headers: Map<String, String>,
+        list: List<UploadedNewPlanModel>
+    ): NewPlanPharmaResponse {
+        println("Uploaded List : $list")
+        return dataRetrofitApi.uploadNewPlanAsync(headers, list).await()
 //        return try{
 //            dataRetrofitApi.uploadActualVisitAsync(headers, list).await()
 //        }catch (ex:Exception){

@@ -148,7 +148,7 @@ class OfficeWorkActivity : ComponentActivity() {
             endTime = GlobalFormats.getFullTime(Locale.getDefault(), currentValues.endDate!!),
             shift =
                 when (currentValues.shiftCurrentValue.embedded.name) {
-                    ShiftEnum.AM_SHIFT.text -> ShiftEnum.PM_SHIFT
+                    ShiftEnum.PM_SHIFT.text -> ShiftEnum.PM_SHIFT
                     ShiftEnum.AM_SHIFT.text -> ShiftEnum.AM_SHIFT
                     ShiftEnum.OTHER.text -> ShiftEnum.OTHER
                     else -> { ShiftEnum.OTHER }

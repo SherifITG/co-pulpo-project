@@ -10,9 +10,6 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.entity.masterData.*
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.relationalData.*
 
 interface OfflineDataRepo {
-    suspend fun saveFileData(itgFile: ItgFile)
-    suspend fun loadFileData(): ItgFile
-
     suspend fun loadActualSettings(): List<Setting>
     suspend fun loadActualAccountTypes(divIds: List<Long>, brickIds: List<Long>): List<AccountType>
     suspend fun loadAllAccountTypes(): List<AccountType>
@@ -32,6 +29,7 @@ interface OfflineDataRepo {
     suspend fun loadPresentations(): List<Presentation>
 
     suspend fun loadUnSyncedActualVisitsData(): List<ActualVisit>
+    suspend fun loadUnSyncedActualNewPlansData(): List<NewPlanEntity>
 
     suspend fun loadRelationalPlannedVisitsData(): List<RelationalPlannedVisit>
     suspend fun loadRelationalNewPlansData(): List<RelationalNewPlan>
@@ -46,6 +44,7 @@ interface OfflineDataRepo {
     suspend fun loadAllDoctorPlanningData(): List<DoctorPlanningData>
 
     suspend fun uploadedActualVisitData(actualVisitDTO: ActualVisitDTO)
+    suspend fun uploadedNewPlanData(newPlanDTO: NewPlanDTO)
     suspend fun insertActualVisitWithValidation(actualVisit: ActualVisit): Long
 
     suspend fun saveMasterData(masterDataPharmaResponse: MasterDataPharmaResponse)
@@ -60,7 +59,8 @@ interface OfflineDataRepo {
     suspend fun saveOfflineLog(offlineLog: OfflineLog)
     suspend fun saveOfflineLoc(offlineLoc: OfflineLoc)
 
-    suspend fun saveNewPlans(newPlanList: List<NewPlanEntity>)
+    suspend fun saveAllNewPlans(newPlanList: List<NewPlanEntity>)
+    suspend fun saveNewPlans(newPlanList: List<NewPlanEntity>): HashMap<Int, Long>
 
     suspend fun uploadedOfflineLogData(offlineLogDTO: OfflineRecordDTO)
     suspend fun uploadedOfflineLocData(offlineLocDTO: OfflineRecordDTO)

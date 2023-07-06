@@ -1,6 +1,7 @@
 package com.itgates.ultra.pulpo.cira.repository
 
 import com.itgates.ultra.pulpo.cira.network.models.requestModels.UploadedActualVisitModel
+import com.itgates.ultra.pulpo.cira.network.models.requestModels.UploadedNewPlanModel
 import com.itgates.ultra.pulpo.cira.network.models.responseModels.responses.*
 
 interface OnlineDataRepo {
@@ -45,4 +46,9 @@ interface OnlineDataRepo {
         headers: Map<String, String>,
         list: List<UploadedActualVisitModel>
     ): ActualVisitPharmaResponse
+
+    suspend fun uploadNewPlansData(
+        headers: Map<String, String>,
+        list: List<UploadedNewPlanModel>
+    ): NewPlanPharmaResponse
 }

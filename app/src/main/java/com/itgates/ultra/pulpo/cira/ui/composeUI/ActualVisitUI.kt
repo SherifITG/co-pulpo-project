@@ -112,7 +112,8 @@ fun VisitDetailsScreen(
                             activity.currentValues.bricksList,
                             brickCurrentValue,
                             isDataChangedToRefresh,
-                            activity.currentValues.brickErrorValue
+                            activity.currentValues.brickErrorValue,
+                            typeFlag = "BRICK"
                         )
                     }
                 }
@@ -401,7 +402,8 @@ fun SelectableDropDownMenu(
     currentValue: MutableState<IdAndNameObj>,
     isDataChangedToRefresh: MutableState<Boolean>,
     isHasError: Boolean,
-    listIndex: Int = -1
+    listIndex: Int = -1,
+    typeFlag: String = ""
 ) {
     val expanded = remember { mutableStateOf(false) }
     val searchValue = remember { mutableStateOf("") }
@@ -441,7 +443,7 @@ fun SelectableDropDownMenu(
                 ) {
                     val dataArrayList = ArrayList(data)
                     // All Bricks
-                    if (data.isNotEmpty() && data[0] is Brick) {
+                    if (data.isNotEmpty() && data[0] is Brick || typeFlag == "BRICK") {
                         dataArrayList.add(
                             0,
                             Brick(-1L, EmbeddedEntity("All Bricks"), "", "")

@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -689,6 +690,16 @@ fun SelectableDropDownMenu(
 }
 
 @Composable
+fun PlanningSaveScreenUI(activity: PlanningActivity) {
+    val isRoomDataFetchedToRefresh = activity.isRoomDataFetchedToRefresh.collectAsState()
+    when(isRoomDataFetchedToRefresh.value) {
+        in 0..5 -> {
+            PlanningSaveScreen(activity)
+        }
+    }
+}
+
+@Composable
 fun PlanningSaveScreen(activity: PlanningActivity) {
     var pickedDateFrom by remember { mutableStateOf(LocalDate.now()) }
     val dateFromDialogState = rememberMaterialDialogState()
@@ -711,19 +722,27 @@ fun PlanningSaveScreen(activity: PlanningActivity) {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(padding_8)
             ) {
-                items(activity.currentValues.selectedDoctors) { item ->
+                itemsIndexed(activity.currentValues.selectedDoctors) { index, item ->
                     Card(
                         shape = ITGatesCardCornerShape,
                         modifier = Modifier
                             .fillMaxWidth(),
                         elevation = padding_16
                     ) {
+                        val status = activity.currentValues.selectedDoctorsStatus[index]
+                        println("888888888888888888888888888888888 $status")
                         Box(
-                            modifier = Modifier.padding(padding_8),
+                            modifier = Modifier
+                                .padding(padding_8)
+                                .background(
+                                    if (status == null) ITGatesWhiteColor
+                                    else if (status > 0) ITGatesGreenColor
+                                    else ITGatesErrorColor
+                                ),
                             contentAlignment = Alignment.Center
                         ) {
                             TextFactory(
-                                text = item.doctor.embedded.name,
+                                text = "${item.accName} - ${item.doctor.embedded.name}",
                                 color = ITGatesPrimaryColor
                             )
                         }

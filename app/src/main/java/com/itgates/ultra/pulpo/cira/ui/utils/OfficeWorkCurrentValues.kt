@@ -37,8 +37,8 @@ class OfficeWorkCurrentValues(private val activity: OfficeWorkActivity) {
 //    var settingMap: Map<String, Int> = mapOf()
     var officeWorkList: List<IdAndNameEntity> = listOf()
     val shiftList: List<IdAndNameEntity> = listOf(
-        IdAndNameEntity(2L, SHIFT, EmbeddedEntity(ShiftEnum.AM_SHIFT.text)),
-        IdAndNameEntity(1L, SHIFT, EmbeddedEntity(ShiftEnum.PM_SHIFT.text))
+        IdAndNameEntity(ShiftEnum.AM_SHIFT.index.toLong(), SHIFT, EmbeddedEntity(ShiftEnum.AM_SHIFT.text)),
+        IdAndNameEntity(ShiftEnum.PM_SHIFT.index.toLong(), SHIFT, EmbeddedEntity(ShiftEnum.PM_SHIFT.text))
     )
 
     // current values
