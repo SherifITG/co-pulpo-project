@@ -198,10 +198,10 @@ class CacheViewModel @Inject constructor(
         }
     }
 
-    fun loadActualAccounts(divId: Long, brickIds: List<Long>, table: String) {
+    fun loadActualAccounts(divId: Long, brickId: Long, table: String) {
         CoroutineManager.getScope().launch {
             try {
-                _accountData.value = offlineDataRepo.loadActualAccounts(divId, brickIds, table)
+                _accountData.value = offlineDataRepo.loadActualAccounts(divId, brickId, table)
             } catch (e: Exception) {
                 _accountData.value = FaultedArrayList()
                 Log.d("CacheViewModel", "loadActualAccounts: failed $e")
@@ -340,10 +340,10 @@ class CacheViewModel @Inject constructor(
         }
     }
 
-    fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long) {
+    fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long, table: String) {
         CoroutineManager.getScope().launch {
             try {
-                offlineDataRepo.updateAccountLocation(llFirst, lgFirst, id)
+                offlineDataRepo.updateAccountLocation(llFirst, lgFirst, id, table)
             } catch (e: Exception) {
                 Log.d("CacheViewModel", "updateAccountLocation: failed $e")
             }

@@ -242,7 +242,8 @@ fun PlannedVisitScreen(
                                 modifier = modifier.padding(padding_16),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                val hasNoLocation = item.firstLL.isEmpty() || item.firstLG.isEmpty()
+//                                val hasNoLocation = item.firstLL.isEmpty() || item.firstLG.isEmpty()
+                                val hasNoLocation = item.firstLL?.isEmpty() ?: true || item.firstLG?.isEmpty() ?: true
 
                                 Column(modifier = Modifier.weight(1F)) {
                                     TextFactory(
@@ -275,10 +276,14 @@ fun PlannedVisitScreen(
                                                 )
                                             }
                                             else {
-                                                PassedValues.mapActivity_ll = item.firstLL.toDouble()
-                                                PassedValues.mapActivity_lg = item.firstLG.toDouble()
-                                                PassedValues.mapActivity_accName = item.accName
-                                                PassedValues.mapActivity_docName = item.docName
+//                                                PassedValues.mapActivity_ll = item.firstLL.toDouble()
+//                                                PassedValues.mapActivity_lg = item.firstLG.toDouble()
+//                                                PassedValues.mapActivity_accName = item.accName
+//                                                PassedValues.mapActivity_docName = item.docName
+                                                PassedValues.mapActivity_ll = item.firstLL?.toDouble() ?: 0.0
+                                                PassedValues.mapActivity_lg = item.firstLG?.toDouble() ?: 0.0
+                                                PassedValues.mapActivity_accName = item.accName.toString()
+                                                PassedValues.mapActivity_docName = item.docName.toString()
                                                 activity.startActivity(Intent(activity, MapActivity::class.java))
                                             }
                                         }
@@ -398,9 +403,9 @@ fun PlannedVisitScreen(
                 datepicker(
                     initialDate = pickedDateFrom,
                     title = "",
-                    allowedDateValidator = {
-                        !it.isBefore(LocalDate.now())
-                    },
+//                    allowedDateValidator = {
+//                        !it.isBefore(LocalDate.now())
+//                    },
                     colors = DatePickerDefaults.colors(
                         calendarHeaderTextColor = ITGatesPrimaryColor,
                         dateActiveBackgroundColor = ITGatesPrimaryColor,

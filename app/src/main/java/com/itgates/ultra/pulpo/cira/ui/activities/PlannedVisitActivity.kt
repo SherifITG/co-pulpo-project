@@ -75,8 +75,11 @@ class PlannedVisitActivity : ComponentActivity() {
     private fun setObservers() {
         cacheViewModel.relationalPlannedVisitData.observe(this@PlannedVisitActivity) {
             println(it)
-            relationalPlannedVisit = it
-            relationalPlannedVisitToShow = it
+            val filteredList = it.filter { relationalPlannedVisit ->
+                relationalPlannedVisit.accName != null && relationalPlannedVisit.docName != null
+            }
+            relationalPlannedVisit = filteredList
+            relationalPlannedVisitToShow = filteredList
             isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
         cacheViewModel.relationalPlannedOfficeWorkData.observe(this@PlannedVisitActivity) {

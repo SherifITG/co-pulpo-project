@@ -11,8 +11,8 @@ data class RelationalPlannedVisit(
     val brickId: Long,
     val accTypeName: String,
     val categoryId: Int,
-    val accName: String,
-    val firstLL: String,
-    val firstLG: String,
-    val docName: String
+    val accName: String?,
+    val firstLL: String?,
+    val firstLG: String?,
+    val docName: String?
 )

@@ -54,7 +54,7 @@ class ActualActivity : ComponentActivity() {
     private val cacheViewModel: CacheViewModel by viewModels()
     var currentValues = ActualCurrentValues(this@ActualActivity)
     private val dataStateFlow = MutableStateFlow(DataStatus.LOADING)
-    val isRoomDataFetchedToRefresh = MutableStateFlow(false)
+    val isRoomDataFetchedToRefresh = MutableStateFlow(0)
     private var actualVisit: ActualVisit? = null
     private var visitDeviation: Long? = null
     val isPlanned = actualActivity_isPlannedVisit
@@ -140,7 +140,8 @@ class ActualActivity : ComponentActivity() {
                 cacheViewModel.updateAccountLocation(
                     currentValues.startLocation!!.latitude.toString(),
                     currentValues.startLocation!!.longitude.toString(),
-                    currentValues.accountCurrentValue.id
+                    currentValues.accountCurrentValue.id,
+                    (currentValues.accTypeCurrentValue as AccountType).table
                 )
             }
 
@@ -266,36 +267,37 @@ class ActualActivity : ComponentActivity() {
             currentValues.settingMap = it.associate { setting ->
                 setting.embedded.name to setting.value.toInt()
             }
-            isRoomDataFetchedToRefresh.value = !isRoomDataFetchedToRefresh.value
+            isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
 
         }
         cacheViewModel.divisionData.observe(this@ActualActivity) {
-            currentValues.divisionsList = it
+            currentValues.divisionsList = it.sortedBy { division -> division.embedded.name }
+            println()
             dataStateFlow.value = DataStatus.DONE
         }
         cacheViewModel.brickData.observe(this@ActualActivity) {
-            currentValues.bricksList = it
-            isRoomDataFetchedToRefresh.value = !isRoomDataFetchedToRefresh.value
+            currentValues.bricksList = it.sortedBy { brick -> brick.embedded.name }
+            isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
         cacheViewModel.accountTypeData.observe(this@ActualActivity) {
             currentValues.accountTypesList = it
-            isRoomDataFetchedToRefresh.value = !isRoomDataFetchedToRefresh.value
+            isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
         cacheViewModel.accountData.observe(this@ActualActivity) {
-            currentValues.accountsList = it
-            isRoomDataFetchedToRefresh.value = !isRoomDataFetchedToRefresh.value
+            currentValues.accountsList = it.sortedBy { account -> account.embedded.name }
+            isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
         cacheViewModel.doctorData.observe(this@ActualActivity) {
-            currentValues.doctorsList = it
-            isRoomDataFetchedToRefresh.value = !isRoomDataFetchedToRefresh.value
+            currentValues.doctorsList = it.sortedBy { doctor -> doctor.embedded.name }
+            isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
         cacheViewModel.idAndNameEntityData.observe(this@ActualActivity) {
             currentValues.multipleList = it
-            isRoomDataFetchedToRefresh.value = !isRoomDataFetchedToRefresh.value
+            isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
         cacheViewModel.presentationData.observe(this@ActualActivity) {
             currentValues.presentationList = it
-            isRoomDataFetchedToRefresh.value = !isRoomDataFetchedToRefresh.value
+            isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
         cacheViewModel.actualVisitStatus.observe(this@ActualActivity) {
             if (it > 0) {
@@ -359,7 +361,7 @@ class ActualActivity : ComponentActivity() {
     }
 
     fun loadAccountData(divId: Long, brickId: Long, table: String) {
-        cacheViewModel.loadActualAccounts(divId, listOf(brickId), table)
+        cacheViewModel.loadActualAccounts(divId, brickId, table)
     }
 
     fun loadDoctorData(accountId: Long, table: String) {
@@ -394,13 +396,17 @@ class ActualActivity : ComponentActivity() {
                 "", "", "", passedPlannedVisit.categoryId
             )
             currentValues.accountCurrentValue = Account(
-                passedPlannedVisit.plannedVisit.itemId, EmbeddedEntity(passedPlannedVisit.accName),
+//                passedPlannedVisit.plannedVisit.itemId, EmbeddedEntity(passedPlannedVisit.accName),
+//                passedPlannedVisit.teamId, 0L, 0L,
+//                passedPlannedVisit.firstLL,passedPlannedVisit.firstLG,
+//                0L, 0L, "", "", "", ""
+                passedPlannedVisit.plannedVisit.itemId, EmbeddedEntity(passedPlannedVisit.accName.toString()),
                 passedPlannedVisit.teamId, 0L, 0L,
-                passedPlannedVisit.firstLL,passedPlannedVisit.firstLG,
+                passedPlannedVisit.firstLL ?: "",passedPlannedVisit.firstLG ?: "",
                 0L, 0L, "", "", "", ""
             )
             currentValues.doctorCurrentValue = Doctor(
-                passedPlannedVisit.plannedVisit.itemDoctorId, EmbeddedEntity(passedPlannedVisit.docName),
+                passedPlannedVisit.plannedVisit.itemDoctorId, EmbeddedEntity(passedPlannedVisit.docName.toString()),
                 0L, 0L, "", "",0L,
                 0L, 0L, "", "", 0, ""
             )

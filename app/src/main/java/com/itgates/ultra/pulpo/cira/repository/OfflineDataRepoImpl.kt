@@ -118,11 +118,11 @@ class OfflineDataRepoImpl @Inject constructor(
 
     override suspend fun loadActualAccounts(
         divId: Long,
-        brickIds: List<Long>,
+        brickId: Long,
         table: String
     ): List<Account> {
-        return if (brickIds.first() != -1L)
-            accountDao.loadActualAccounts(divId, brickIds, table)
+        return if (brickId != -1L)
+            accountDao.loadActualAccounts(divId, brickId, table)
         else
             accountDao.loadActualAccountsWithoutBrick(divId, table)
     }
@@ -177,8 +177,8 @@ class OfflineDataRepoImpl @Inject constructor(
         return accountDao.loadAllAccountReportData()
     }
 
-    override suspend fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long) {
-        accountDao.updateAccountLocation(llFirst, lgFirst, id)
+    override suspend fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long, table: String) {
+        accountDao.updateAccountLocation(llFirst, lgFirst, id, table)
     }
 
     override suspend fun loadAllDoctorReportData(): List<DoctorData> {

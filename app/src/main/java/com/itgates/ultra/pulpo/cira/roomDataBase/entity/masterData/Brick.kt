@@ -12,6 +12,6 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.TablesNames
 data class Brick(
     @PrimaryKey override val id: Long,
     @Embedded(prefix = "embedded_brick_") override val embedded: EmbeddedEntity,
-    @ColumnInfo(name = "team_id") val team_id: String,
-    @ColumnInfo(name = "ter_id") val ter_id: String
+    @ColumnInfo(name = "team_id") val teamId: String,
+    @ColumnInfo(name = "ter_id") val terId: String
 ): IdAndNameObj(id, embedded)

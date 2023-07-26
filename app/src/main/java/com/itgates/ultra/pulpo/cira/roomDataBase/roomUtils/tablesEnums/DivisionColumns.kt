@@ -15,7 +15,7 @@ object DivisionColumns {
 object BrickColumns {
     const val ID = "id"
     const val EMBEDDED_BRICK_NAME = "embedded_brick_"
-    const val TEAM_ID = "team_id"
+    const val LINE_ID = "line_id"
     const val TERRITORY_ID = "ter_id"
 }
 

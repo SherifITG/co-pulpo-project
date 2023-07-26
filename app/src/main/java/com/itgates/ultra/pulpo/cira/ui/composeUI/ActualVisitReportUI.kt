@@ -370,9 +370,9 @@ fun ActualVisitScreen(
                 datepicker(
                     initialDate = pickedDateFrom,
                     title = "",
-                    allowedDateValidator = {
-                        !it.isBefore(LocalDate.now())
-                    },
+//                    allowedDateValidator = {
+//                        !it.isBefore(LocalDate.now())
+//                    },
                     colors = DatePickerDefaults.colors(
                         calendarHeaderTextColor = ITGatesPrimaryColor,
                         dateActiveBackgroundColor = ITGatesPrimaryColor,

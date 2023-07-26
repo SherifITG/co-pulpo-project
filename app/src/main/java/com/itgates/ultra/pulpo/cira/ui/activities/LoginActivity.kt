@@ -38,7 +38,6 @@ class LoginActivity : ComponentActivity() {
     private val cacheViewModel: CacheViewModel by viewModels()
     private val internetStateFlow = MutableStateFlow(false)
     private val loadingStateFlow = MutableStateFlow(false)
-    private val trial = MutableStateFlow(false)
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {

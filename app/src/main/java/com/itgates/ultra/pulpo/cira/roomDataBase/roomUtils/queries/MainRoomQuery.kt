@@ -9,7 +9,8 @@ object MainRoomQuery {
 
     const val updateAccountLocationQuery = "UPDATE ${TablesNames.AccountTable}" +
             " SET ${AccountColumns.LL_FIRST} = :llFirst, ${AccountColumns.LG_FIRST} = :lgFirst" +
-            " WHERE ${AccountColumns.ID} = :id"
+            " WHERE ${AccountColumns.ID} = :id" +
+            " AND ${AccountColumns.TBL} = :table"
 
     const val settingByNamesListQuery = "SELECT * FROM ${TablesNames.SettingTable}" +
             " WHERE ${SettingColumns.EMBEDDED_SETTING_NAME} IN (:names)"
@@ -39,7 +40,7 @@ object MainRoomQuery {
 
     const val accountsQuery = "SELECT * FROM ${TablesNames.AccountTable}" +
             " WHERE ${AccountColumns.DIVISION_ID} = :divId" +
-            " AND ${AccountColumns.BRICK_ID} = :brickIds" +
+            " AND ${AccountColumns.BRICK_ID} = :brickId" +
             " AND ${AccountColumns.TBL} = :accTypeTable"
 
     const val doctorsQuery = "SELECT * FROM ${TablesNames.DoctorTable}" +

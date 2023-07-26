@@ -110,7 +110,7 @@ interface IdAndNameDao : GenericDao<IdAndNameEntity> {
 @Dao
 interface AccountDao : GenericDao<Account> {
     @Query(MainRoomQuery.accountsQuery)
-    suspend fun loadActualAccounts(divId: Long, brickIds: List<Long>, accTypeTable: String): List<Account>
+    suspend fun loadActualAccounts(divId: Long, brickId: Long, accTypeTable: String): List<Account>
 
     @Query(MainRoomQuery.accountsQueryWithoutBrick)
     suspend fun loadActualAccountsWithoutBrick(divId: Long, accTypeTable: String): List<Account>
@@ -119,7 +119,7 @@ interface AccountDao : GenericDao<Account> {
     suspend fun loadAllAccountReportData(): List<AccountData>
 
     @Query(MainRoomQuery.updateAccountLocationQuery)
-    suspend fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long)
+    suspend fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long, table: String)
 
     @Query("DELETE FROM ${TablesNames.AccountTable}")
     suspend fun deleteAll()

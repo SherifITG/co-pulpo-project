@@ -24,7 +24,7 @@ interface OfflineDataRepo {
     suspend fun loadSlidesByPresentationId(presentationId: Long): List<Slide>
     suspend fun loadOfficeWorkTypes(): List<IdAndNameEntity>
     suspend fun loadProducts(): List<IdAndNameEntity>
-    suspend fun loadActualAccounts(divId: Long, brickIds: List<Long>, table: String): List<Account>
+    suspend fun loadActualAccounts(divId: Long, brickId: Long, table: String): List<Account>
     suspend fun loadActualDoctors(accountId: Long, table: String): List<Doctor>
     suspend fun loadPresentations(): List<Presentation>
 
@@ -39,7 +39,7 @@ interface OfflineDataRepo {
     suspend fun loadRelationalActualVisitsData(): List<RelationalActualVisit>
     suspend fun loadRelationalOfficeWorkReportsData(): List<RelationalOfficeWorkReport>
     suspend fun loadAllAccountReportData(): List<AccountData>
-    suspend fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long)
+    suspend fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long, table: String)
     suspend fun loadAllDoctorReportData(): List<DoctorData>
     suspend fun loadAllDoctorPlanningData(): List<DoctorPlanningData>
 

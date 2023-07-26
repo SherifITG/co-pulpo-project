@@ -12,7 +12,7 @@ interface DataRetrofitApi {
     fun pharmaAuthenticateUserAsync(
         @HeaderMap headers: Map<String, String>,
         @Query("FN") FN: String,
-        @Query("username") CheckLogin: String,
+        @Query("username") username: String,
         @Query("password") password: String
     ): Deferred<LoginPharmaResponse>
 

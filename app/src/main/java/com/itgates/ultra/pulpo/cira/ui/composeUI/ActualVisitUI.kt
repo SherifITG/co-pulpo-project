@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,7 +16,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.itgates.ultra.pulpo.cira.R
 import com.itgates.ultra.pulpo.cira.roomDataBase.entity.EmbeddedEntity
 import com.itgates.ultra.pulpo.cira.roomDataBase.entity.masterData.Brick
@@ -36,7 +40,7 @@ fun ActualVisitUI(activity: ActualActivity) {
     val isRoomDataFetchedToRefresh = activity.isRoomDataFetchedToRefresh.collectAsState()
     val isDataChangedToRefresh = remember { mutableStateOf(false) }
     when(isRoomDataFetchedToRefresh.value) {
-        true, false -> {
+        in 0..5 -> {
             when(isDataChangedToRefresh.value) {
                 true, false -> {
                     if (activity.isPlanned) {
@@ -449,6 +453,26 @@ fun SelectableDropDownMenu(
                             Brick(-1L, EmbeddedEntity("All Bricks"), "", "")
                         )
                     }
+                    
+                    // ----------------------------------------------------
+//                    if (dataArrayList.size < 20) {
+//
+//                    }
+//                    else {
+//                        val configuration = LocalConfiguration.current
+//
+//                        val menuHeight = configuration.screenHeightDp.times(0.7F).dp
+//                        val menuWidth = configuration.screenWidthDp.times(0.7F).dp
+//                        LazyColumn(
+//                            modifier = Modifier
+//                                .width(menuWidth)
+//                                .height(menuHeight)
+//                        ) {
+//                            itemsIndexed(dataArrayList) {index, item ->
+//
+//                            }
+//                        }
+//                    }
                     dataArrayList.forEachIndexed { index, item ->
                         if (index == 0) {
                             Box(modifier = Modifier.padding(horizontal = padding_16, vertical = padding_8)) {
