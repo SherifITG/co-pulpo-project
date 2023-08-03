@@ -7,6 +7,7 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.entity.e_detailing.Slide
 import com.itgates.ultra.pulpo.cira.roomDataBase.entity.generalData.*
 import com.itgates.ultra.pulpo.cira.roomDataBase.entity.masterData.*
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.TablesNames
+import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.TablesNames.AccountTable
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.enums.IdAndNameTablesNamesEnum
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.enums.MultiplicityEnum
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.enums.ShiftEnum
@@ -117,6 +118,9 @@ interface AccountDao : GenericDao<Account> {
 
     @Query(RelationalRoomQuery.accountsListQuery)
     suspend fun loadAllAccountReportData(): List<AccountData>
+
+    @Query("select * from $AccountTable")
+    suspend fun loadAllAccountReport(): List<Account>
 
     @Query(MainRoomQuery.updateAccountLocationQuery)
     suspend fun updateAccountLocation(llFirst: String, lgFirst: String, id: Long, table: String)

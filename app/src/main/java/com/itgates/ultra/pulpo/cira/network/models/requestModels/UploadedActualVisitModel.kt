@@ -46,10 +46,9 @@ data class UploadedActualVisitModel(
         if (actualVisit.multiplicity == MultiplicityEnum.DOUBLE_VISIT) "1" else "0",
         actualVisit.startDate, actualVisit.startTime,
         when (actualVisit.shift) {
-            ShiftEnum.AM_SHIFT -> 2
-            ShiftEnum.PM_SHIFT -> 1
-            ShiftEnum.OTHER -> 3
-            else -> 3
+            ShiftEnum.AM_SHIFT -> ShiftEnum.AM_SHIFT.index.toInt()
+            ShiftEnum.PM_SHIFT -> ShiftEnum.PM_SHIFT.index.toInt()
+            ShiftEnum.OTHER -> ShiftEnum.OTHER.index.toInt()
         },
         actualVisit.comments, actualVisit.plannedVisitId, actualVisit.insertionDate,
         actualVisit.insertionTime, actualVisit.userId, actualVisit.teamId,

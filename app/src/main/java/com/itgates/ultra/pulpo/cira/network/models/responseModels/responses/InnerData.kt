@@ -59,6 +59,7 @@ data class OnlineMasterData(
     )
 
     fun collectAllIdAndNameRoomObjects(): List<IdAndNameEntity> {
+        println("----------- sherif ${managers.size}, $managers")
         return lines.stream().map { it.toRoomLine() }.toList()
                 .asSequence()
                 .plus(specialties.stream().map { it.toRoomSpeciality() }.toList())
@@ -214,7 +215,10 @@ data class OnlineIdAndNameObjectData(
     fun toRoomGiveaway() = IdAndNameEntity(this.id, IdAndNameTablesNamesEnum.GIVEAWAY, EmbeddedEntity(this.name))
     fun toRoomOfficeWorkTypes() = IdAndNameEntity(this.id, IdAndNameTablesNamesEnum.OFFICE_WORK_TYPE, EmbeddedEntity(this.name))
     fun toRoomProduct() = IdAndNameEntity(this.id, IdAndNameTablesNamesEnum.PRODUCT, EmbeddedEntity(this.name))
-    fun toRoomManager() = IdAndNameEntity(this.id, IdAndNameTablesNamesEnum.MANAGER, EmbeddedEntity(this.name))
+    fun toRoomManager(): IdAndNameEntity {
+        println("--------------- sherif -- $id  --  $name")
+        return IdAndNameEntity(this.id, IdAndNameTablesNamesEnum.MANAGER, EmbeddedEntity(this.name))
+    }
     fun toRoomComment() = IdAndNameEntity(this.id, IdAndNameTablesNamesEnum.COMMENT, EmbeddedEntity(this.name))
 }
 

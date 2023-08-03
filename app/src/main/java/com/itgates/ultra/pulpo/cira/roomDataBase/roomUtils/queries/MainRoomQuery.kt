@@ -62,12 +62,13 @@ object MainRoomQuery {
 
     // ---------------------------------------------------------------------------------------------
     private const val actualVisitValidationQuery = "SELECT 1 FROM ${TablesNames.ActualVisitTable}" +
-            " WHERE user_id = :userId AND start_date = :startDate " +
-            "AND item_id = :itemId AND item_doctor_id = :itemDoctorId " +
-            "AND account_type_id = :accountTypeId"
+            " WHERE user_id = :userId AND start_date = :startDate" +
+            " AND item_id = :itemId AND item_doctor_id = :itemDoctorId" +
+            " AND account_type_id = :accountTypeId" +
+            " AND division_id <> -1"
 
     private const val officeWorkValidationQuery = "SELECT 1 FROM ${TablesNames.ActualVisitTable}" +
-            " WHERE user_id = :userId AND start_date = :startDate AND shift = :shift"
+            " WHERE user_id = :userId AND start_date = :startDate AND shift = :shift AND division_id = -1"
 
     private const val insertActualVisitWithValidationFirstPartQuery =
         "INSERT INTO ${TablesNames.ActualVisitTable} (" +

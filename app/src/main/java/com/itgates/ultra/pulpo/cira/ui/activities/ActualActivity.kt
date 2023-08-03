@@ -268,7 +268,6 @@ class ActualActivity : ComponentActivity() {
                 setting.embedded.name to setting.value.toInt()
             }
             isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
-
         }
         cacheViewModel.divisionData.observe(this@ActualActivity) {
             currentValues.divisionsList = it.sortedBy { division -> division.embedded.name }
@@ -292,6 +291,7 @@ class ActualActivity : ComponentActivity() {
             isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
         cacheViewModel.idAndNameEntityData.observe(this@ActualActivity) {
+            println("1111116333, $it")
             currentValues.multipleList = it
             isRoomDataFetchedToRefresh.value = (isRoomDataFetchedToRefresh.value + 1) % 5
         }
@@ -310,11 +310,11 @@ class ActualActivity : ComponentActivity() {
                     Utilities.navigateToMainActivity(applicationContext)
                 }
             }
-            else if (it > -2) {
-                Utilities.createCustomToast(applicationContext, "error when saving this actual visit")
+            else if (it == -1L) {
+                Utilities.createCustomToast(applicationContext, "this actual visit is done before")
             }
             else {
-                Utilities.createCustomToast(applicationContext, "this actual visit is done before")
+                Utilities.createCustomToast(applicationContext, "error when saving this actual visit")
             }
         }
         cacheViewModel.plannedVisitMarkedDone.observe(this@ActualActivity) {

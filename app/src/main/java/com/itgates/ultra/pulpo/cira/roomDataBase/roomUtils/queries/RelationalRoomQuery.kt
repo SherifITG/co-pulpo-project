@@ -33,7 +33,7 @@ object RelationalRoomQuery {
                 " LEFT JOIN ${TablesNames.AccountTypeTable} AS accType" +
                 " ON planned.acc_type_id = accType.id" +
                 " LEFT JOIN ${TablesNames.AccountTable} AS acc" +
-                " ON planned.item_id = acc.id AND acc.tbl = accType.tbl" +
+                " ON planned.item_id = acc.id AND acc.tbl = accType.tbl AND acc.division_id = div.id" +
                 " LEFT JOIN ${TablesNames.DoctorTable} AS doc" +
                 " ON planned.item_doctor_id = doc.id AND doc.tbl = accType.tbl" +
                 " LEFT JOIN ${TablesNames.BrickTable} AS brick" +
@@ -48,7 +48,7 @@ object RelationalRoomQuery {
                 " LEFT JOIN ${TablesNames.AccountTypeTable} AS accType" +
                 " ON planned.acc_type_id = accType.id" +
                 " LEFT JOIN ${TablesNames.AccountTable} AS acc" +
-                " ON planned.item_id = acc.id AND acc.tbl = accType.tbl" +
+                " ON planned.item_id = acc.id AND acc.tbl = accType.tbl AND acc.division_id = div.id" +
                 " LEFT JOIN ${TablesNames.DoctorTable} AS doc" +
                 " ON planned.item_doctor_id = doc.id AND doc.tbl = accType.tbl" +
                 " LEFT JOIN ${TablesNames.BrickTable} AS brick" +
@@ -82,7 +82,7 @@ object RelationalRoomQuery {
                 " LEFT JOIN ${TablesNames.AccountTypeTable} AS accType" +
                 " ON actual.account_type_id = accType.id" +
                 " LEFT JOIN ${TablesNames.AccountTable} AS acc" +
-                " ON actual.item_id = acc.id AND acc.tbl = accType.tbl" +
+                " ON actual.item_id = acc.id AND acc.tbl = accType.tbl AND acc.division_id = div.id" +
                 " LEFT JOIN ${TablesNames.DoctorTable} AS doc" +
                 " ON actual.item_doctor_id = doc.id AND doc.tbl = accType.tbl" +
                 " LEFT JOIN ${TablesNames.BrickTable} AS brick" +
@@ -162,7 +162,7 @@ object RelationalRoomQuery {
                 " LEFT JOIN ${TablesNames.AccountTypeTable} AS accType" +
                 " ON newPlan.acc_type_id = accType.id" +
                 " LEFT JOIN ${TablesNames.AccountTable} AS acc" +
-                " ON newPlan.item_id = acc.id AND acc.tbl = accType.tbl" +
+                " ON newPlan.item_id = acc.id AND acc.tbl = accType.tbl AND acc.division_id = div.id" +
                 " LEFT JOIN ${TablesNames.DoctorTable} AS doc" +
                 " ON newPlan.item_doctor_id = doc.id AND doc.tbl = accType.tbl" +
                 " LEFT JOIN ${TablesNames.BrickTable} AS brick" +

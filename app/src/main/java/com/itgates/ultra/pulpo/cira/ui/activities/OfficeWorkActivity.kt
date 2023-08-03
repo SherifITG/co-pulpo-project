@@ -171,6 +171,8 @@ class OfficeWorkActivity : ComponentActivity() {
             multipleListsInfo = RoomMultipleListsModule(listOf(), listOf(), listOf())
         )
 
+        println("---------------- ... ${this.actualVisit?.shift?.index},  ${this.actualVisit?.shift?.name}")
+
         cacheViewModel.insertActualVisitWithValidation(this.actualVisit!!)
     }
 

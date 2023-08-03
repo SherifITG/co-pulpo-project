@@ -268,7 +268,9 @@ class MainActivity : BaseDataActivity() {
         serverViewModel.uploadedActualVisitData.observeForever { response ->
             if (response.Data.isNotEmpty()) {
                 response.Data.forEach {
-                    cacheViewModel.uploadedActualVisitData(it)
+                    if (it.visitId > 0) {
+                        cacheViewModel.uploadedActualVisitData(it)
+                    }
                 }
             }
         }

@@ -16,7 +16,12 @@ android {
         minSdk 26
         targetSdk 33
         versionCode 6
-        versionName "1.6"
+        versionName "1.6" // cira
+//        versionName "1.6" // magic
+//        versionName "1.6" // helal
+//        versionName "1.6" // mce
+//        versionName "1.6" // atm
+//        versionName "1.6" // egpi
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -25,7 +30,7 @@ android {
 
         buildConfigField("String", "API_LINK", "\"${project.findProperty("api_link")}\"")
         applicationVariants.all { variant ->
-            variant.resValue "string", "project_name", "Pulpo Ultra ${project.property('project_name')}"
+            variant.resValue "string", "project_name", "pulpoultra-${project.property('project_name')}"
             variant.resValue "string", "BASE_URL_PHARMA", "${project.property('api_link')}"
         }
 }

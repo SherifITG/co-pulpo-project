@@ -8,7 +8,10 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.IdAndNameObj
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.TablesNames
 import com.itgates.ultra.pulpo.cira.roomDataBase.roomUtils.tablesEnums.AccountColumns
 
-@Entity(tableName = TablesNames.AccountTable, primaryKeys = [AccountColumns.ID, AccountColumns.TBL])
+@Entity(
+    tableName = TablesNames.AccountTable,
+    primaryKeys = [AccountColumns.ID, AccountColumns.DIVISION_ID, AccountColumns.TBL]
+)
 data class Account(
     @ColumnInfo(AccountColumns.ID) override val id: Long,
     @Embedded(prefix = "embedded_account_") override val embedded: EmbeddedEntity,

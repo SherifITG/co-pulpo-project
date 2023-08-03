@@ -110,7 +110,6 @@ class AccountsReportActivity : ComponentActivity() {
     }
 
     fun applyFilters(divId: Long, brickId: Long, classId: Long, accTypeTable: String) {
-        println(" 99999999999999999999999999999999 $divId 999 $brickId 999 $classId 999 $accTypeTable")
         var accountsFiltered = currentValues.accountsDataList
 
         // division filter step

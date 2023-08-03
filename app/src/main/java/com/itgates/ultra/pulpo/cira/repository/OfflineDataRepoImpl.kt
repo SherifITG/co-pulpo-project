@@ -193,7 +193,7 @@ class OfflineDataRepoImpl @Inject constructor(
     override suspend fun uploadedActualVisitData(actualVisitDTO: ActualVisitDTO) {
         return actualVisitDao.updateSyncedActualVisits(
             actualVisitDTO.visitId, actualVisitDTO.syncDate, actualVisitDTO.syncTime,
-            (actualVisitDTO.isSynced == 1), actualVisitDTO.offlineId
+            true, actualVisitDTO.offlineId
         )
     }
 

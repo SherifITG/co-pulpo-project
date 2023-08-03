@@ -17,7 +17,7 @@ import com.itgates.ultra.pulpo.cira.roomDataBase.entity.masterData.*
         OfflineLog::class, OfflineLoc::class, Presentation::class, Slide::class,
         NewPlanEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
