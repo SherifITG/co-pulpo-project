@@ -3,37 +3,47 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id "org.jetbrains.kotlin.kapt"
     id 'com.google.dagger.hilt.android'
+
+    // Add the Google services Gradle plugin
+    id 'com.google.gms.google-services'
+
+    // Add the Crashlytics Gradle plugin
+    id 'com.google.firebase.crashlytics'
+
+    // id 'com.huawei.agconnect'
 }
 
 android {
-    namespace 'com.itgates.ultra.pulpo.cira'
+    namespace 'com.itgates.co.pulpo.ultra'
     compileSdk 33
 
     defaultConfig {
         //TODO company versions
-//        applicationId "com.itgates.ultra.pulpo.cira"
-        applicationId "com.itgates.ultra.pulpo.${project.findProperty("project_package_name_postfix")}"
+        applicationId "com.itgates.${project.findProperty("project_package_name_postfix")}.pulpo.ultra"
         minSdk 26
         targetSdk 33
-        versionCode 6
-        versionName "1.6" // cira
-//        versionName "1.6" // magic
-//        versionName "1.6" // helal
-//        versionName "1.6" // mce
-//        versionName "1.6" // atm
-//        versionName "1.6" // egpi
+        versionCode 1
+        versionName "1.1" // co
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
 
-        buildConfigField("String", "API_LINK", "\"${project.findProperty("api_link")}\"")
         applicationVariants.all { variant ->
-            variant.resValue "string", "project_name", "pulpoultra-${project.property('project_name')}"
-            variant.resValue "string", "BASE_URL_PHARMA", "${project.property('api_link')}"
+            variant.resValue "string", "project_name", "Co Pulpo Ultra"
         }
-}
+    }
+
+    signingConfigs {
+        // Add the following block for debug signing using the release config
+        debug {
+            storeFile file('C:/Users/sheri/AndroidStudioProjects/apps_keys/itgates.jks')
+            storePassword 'Pulp0_Ultra_Key_Passw0rd'
+            keyAlias 'ITGates_Pulp0_Ultra_Elias'
+            keyPassword 'ITGates_Pulp0_Ultra_Elias'
+        }
+    }
 
     buildTypes {
         release {
@@ -149,11 +159,27 @@ dependencies {
 
     // Google Maps
     implementation 'com.google.maps.android:maps-compose:2.7.2'
-    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
 
     // PDF
 //    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     implementation 'com.github.instacart:truetime-android:3.5'
+
+    // lottie animation
+    implementation 'com.airbnb.android:lottie-compose:6.1.0'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.8.21'
+
+    // Import the Firebase BoM
+    implementation(platform('com.google.firebase:firebase-bom:32.7.0'))
+    implementation 'com.google.firebase:firebase-analytics'
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.4.0'
+
+
+    // for Huawei
+    // implementation 'com.huawei.hms:iap:6.10.0.300'
 
 }
 

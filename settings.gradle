@@ -3,6 +3,10 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+
+        // for Huawei
+        // Configure the Maven repository address for the HMS Core SDK.
+        // maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 dependencyResolutionManagement {
@@ -11,9 +15,14 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+
+        // for Huawei
+        // Configure the Maven repository address for the HMS Core SDK.
+        // maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 
 //TODO company versions
-rootProject.name = "Pulpo Ultra ${settings.ext.project_name}"
+//rootProject.name = "Pulpoultra-${settings.ext.project_name}"
+rootProject.name = "Co-Pulpoultra"
 include ':app'

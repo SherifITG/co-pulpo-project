@@ -10,15 +10,20 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+<!--    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />-->
 <!--    <uses-permission-->
 <!--        android:name="android.permission.WRITE_EXTERNAL_STORAGE"-->
 <!--        tools:ignore="ScopedStorage" />-->
 
     <application
         android:name=".AppController"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -29,6 +34,23 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.activities.MapActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".ui.activities.MyLocationMapActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra">
+        </activity>
+        <activity
+            android:name=".ui.activities.MyLocationCustomMapActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.PulpoUltra">
@@ -69,6 +91,12 @@
             android:theme="@style/Theme.PulpoUltra">
         </activity>
         <activity
+            android:name=".ui.activities.PINActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra">
+        </activity>
+        <activity
             android:name=".ui.activities.DataCenterActivity"
             android:exported="true"
             android:label="@string/title_activity_data_center"
@@ -81,12 +109,24 @@
             android:theme="@style/Theme.PulpoUltra" >
         </activity>
         <activity
+            android:name=".ui.activities.NewUserDataActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PulpoUltra" >
+        </activity>
+        <activity
             android:name=".ui.activities.ActualActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.PulpoUltra" />
         <activity
             android:name=".ui.activities.OfficeWorkActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.VacationActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.PulpoUltra" />
@@ -130,9 +170,54 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.DBReportsActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.DBTableReportActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
+        <activity
+            android:name=".ui.activities.OnlineDebuggingActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulpoUltra" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/polpo7" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/purple_700" />
+<!--        <meta-data-->
+<!--            android:name="com.google.firebase.messaging.default_notification_channel_id"-->
+<!--            android:value="@string/default_notification_channel_id" />-->
+
+        <service
+            android:name=".locationService.LocationService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".onlineLogService.OnlineDebuggingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".firebase.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

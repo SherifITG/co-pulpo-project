@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "592353763759",
+    "project_id": "co-pulpo",
+    "storage_bucket": "co-pulpo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592353763759:android:4f88b73447f274b2770f5a",
+        "android_client_info": {
+          "package_name": "com.itgates.co.pulpo.ultra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPxyU4TXNGTAfbAYQiJnz-Ym_rA0zfcRI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

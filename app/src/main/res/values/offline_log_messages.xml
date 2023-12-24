@@ -3,8 +3,17 @@
     <string name="missing_location_permission">Missing location permission</string>
     <string name="gps_is_disabled">GPS is disabled</string>
     <string name="no_location_provider_or_cached">There is no Location Provider or Cached one</string>
+    <string name="no_location_provided">There is no Location Provided</string>
     <string name="from_lock_location_app">Location is from Mock Location App</string>
     <string name="lock_location_app_running">Mock Location App is running</string>
     <string name="some_error_with_location">Some error with location</string>
     <string name="enable_automatic_time_option">Enable the automatic time option</string>
+
+
+    <string name="login_action">Login Action</string>
+    <string name="login_action_success">Login Action Success</string>
+    <string name="login_action_failed">Login Action Failed</string>
 </resources>
+
+<!--  login page             form id = 2-->
+<!--  main page              form id = 3-->
